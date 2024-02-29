@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../services/firebaseConfig';
+import { useUserStore } from '../../store/useUserStore';
 
 const Logout = () => {
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false)
+  const setUser = useUserStore((state) => state.setUser)
 
   useEffect(() => {
     logout()
@@ -15,6 +17,7 @@ const Logout = () => {
     setIsLoading(true)
     await auth.signOut();
     setIsLoading(false)
+    setUser(null)
     navigate("/")
   }
   

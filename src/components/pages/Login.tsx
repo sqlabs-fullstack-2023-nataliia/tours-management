@@ -3,7 +3,9 @@ import { FcGoogle } from "react-icons/fc";
 import { auth, database, googleProvider } from '../../services/firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { useUserStore } from '../../store/useUserStore';
+import { UserModel } from '../../models/UserModel';
 
 const Login = () => {
 
@@ -15,7 +17,6 @@ const Login = () => {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  
 
   const handleLogin = async () => {
     // TODO validation
@@ -57,6 +58,7 @@ const Login = () => {
                   role: 'user'
               })
                   .then(account_created => {
+
                       navigate("/")
                       setIsLoading(false)
                   })

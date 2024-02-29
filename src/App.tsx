@@ -3,36 +3,55 @@ import './App.css'
 import { RouteType } from './models/RouteType'
 import { ROUTES } from './config/route-config'
 import Navigator from './components/Navigator'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from './services/firebaseConfig'
+import { auth, database } from './services/firebaseConfig'
+import { collection, getDocs, query, where } from 'firebase/firestore'
+import { UserModel } from './models/UserModel'
+import { useUserStore } from './store/useUserStore'
 
 const App = () => {
 
-  const [user, setUser] = useState<any>(null);
+  const setCurrentUser = useUserStore((state) => state.setUser)
+  const [user, setUser] = useState<UserModel | null>(null);
+  const relevantRoutes: RouteType[] 
+    = useMemo<RouteType[]>(() => getRelevantRoutes(user?.role || "any"), [user])
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user)
-      } else {
-        setUser(null);
+    onAuthStateChanged(auth, async (user) => {
+      console.log("on auth state changed")
+      if(user){
+        const accountRef = collection(database, "accounts");
+        const q = query(accountRef, where("uid", "==", auth.currentUser?.uid));
+        const qSnapShot = await getDocs(q);
+        if(!qSnapShot.empty){
+          const currentUser = qSnapShot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+          }))[0] as UserModel
+          setUser(currentUser)
+          setCurrentUser(currentUser)
+        }
       }
     })
   }, [])
-  
+
   return (
     <BrowserRouter>
-      <Navigator routes={ROUTES}/>
+      <Navigator routes={relevantRoutes}/>
       <Routes>
-        { getRoutes(ROUTES) }
+        { getRoutes(relevantRoutes) }
       </Routes>
     </BrowserRouter>
   )
 }
 
-export default App
+export default App;
 
 const getRoutes = (routes: RouteType[]) => {
   return routes.map((e) => <Route key={e.path} path={e.path} element={e.element}/>)
+}
+
+const getRelevantRoutes = (role: string) => {
+  return ROUTES.filter(e => e.roles.includes(role))
 }
