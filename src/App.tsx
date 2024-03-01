@@ -53,5 +53,5 @@ const getRoutes = (routes: RouteType[]) => {
 }
 
 const getRelevantRoutes = (role: string) => {
-  return ROUTES.filter(e => e.roles.includes(role))
+  return ROUTES.filter(e => e.roles.includes(role) && e.displayRole.includes(role))
 }

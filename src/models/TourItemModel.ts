@@ -1,9 +1,8 @@
 
 export interface TourItemModel {
-    id: string,
-    tourId: string,
-    available: number,
-    languageId: string,
     departureDate: string,
-    returningDate: string
+    language: string,
+    totalAvailability: number,
+    availability: number,
+    price: number,
 }

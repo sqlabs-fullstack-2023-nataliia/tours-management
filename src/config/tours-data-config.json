@@ -1,0 +1,4 @@
+{
+    "languages": ["English", "Spanish", "French", "Russian", "Hebrew"],
+    "availability": [15, 20, 25, 30]
+  }
