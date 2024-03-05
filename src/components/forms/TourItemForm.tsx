@@ -1,113 +1,139 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toursData from '../../config/tours-data-config.json'
+import { TourItemModel } from '../../models/TourItemModel';
+import { TourModel } from '../../models/TourModel';
 
-// interface Props {
-//   tour: TourModel
-// }
+interface Props {
+  tour: TourModel | null,
+  isUpdate: TourItemModel | null
+  addTourItem: (tourItem: TourItemModel) => void
+  updateTourItem: (tourItem: TourItemModel | null) => void
+}
 
-const AddTourItem = () => {
+const AddTourItem = ({addTourItem, isUpdate, updateTourItem, tour}: Props) => {
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [departureDate, setDepartureDate] = useState('');
-  const [language, setlanguage] = useState('');
-  const [totalAvailability, setTotalAvailability] = useState(0);
-  const [price, setPrice] = useState(0)
+  console.log(isUpdate)
 
-
-  const handleAdd = () => {
-    console.log(departureDate)
-    console.log(language)
-    console.log(totalAvailability)
-    resetForm()
-  }
+  const [departureDate, setDepartureDate] = useState(isUpdate?.departureDate || '');
+  const [language, setlanguage] = useState(isUpdate?.language || toursData.languages[0]);
+  const [totalAvailability, setTotalAvailability] = useState(isUpdate?.totalAvailability || 0);
+  const [price, setPrice] = useState(isUpdate?.price || 0);
+  const [status, setStatus] = useState(isUpdate?.status || toursData.status[0])
 
   const handleReset = () => {
-    resetForm()
+   console.log(' handle reset')
+    setDepartureDate(isUpdate?.departureDate || '')
+    setlanguage(isUpdate?.language || toursData.languages[0])
+    setTotalAvailability(isUpdate?.totalAvailability || 0)
+    setPrice(isUpdate?.price || 0)
+    setStatus(isUpdate?.status || toursData.status[0])
   }
 
-  const resetForm = () => {
-    setDepartureDate('')
-    setlanguage('')
-    setTotalAvailability(0)
+  useEffect(() => {
+    handleReset()
+  }, [isUpdate])
+
+  const handleAdd = () => {
+    addTourItem({
+      id: Date.now().toString(),
+      departureDate: departureDate,
+      language: language,
+      totalAvailability: totalAvailability,
+      availability: totalAvailability,
+      price: price,
+      status: status
+    })
   }
 
+  const handleUpdate = () => {
+    updateTourItem({
+        id: isUpdate?.id || '',
+        departureDate: departureDate,
+        language: language,
+        totalAvailability: totalAvailability,
+        availability: totalAvailability,
+        price: price,
+        status: status
+      })
+  }
+
+  const handleCancel = () => {
+    updateTourItem(null)
+  }
 
   return (
-    <div className='container mt-4'>
-    <h1 className='d-flex justify-content-center'>Add tour</h1>
-    {
-      isLoading ? (
-      <div className='container d-flex justify-content-center'>
-        <div className="spinner-border text-secondary" role="status"></div>
+    <div className="col col-lg-7 col-12">
+    <div className="container">
+    <h6 style={{fontWeight: 'bold'}}>Tour option</h6>
+      <div className="row py-4" style={{background: 'rgb(251, 253, 255)', borderRadius: '15px'}}>
+        <div className="col col-3 mt-1">
+        <label htmlFor="exampleFormControlInput1" className="form-label">Deparcher</label>
+        </div>
+        <div className="col col-9 mb-2">
+      <input 
+        value={departureDate}
+        onChange={(e) => setDepartureDate(e.target.value)} 
+        type="date" 
+        className="form-control" 
+        placeholder="" 
+        min={new Date().toISOString().split("T")[0]} 
+        max={new Date(new Date().getFullYear(), new Date().getMonth() + 2, new Date().getDate()).toISOString().split("T")[0]}/>
+        </div>
+        <div className="col col-3 mt-1">
+        <label htmlFor="exampleFormControlInput1" className="form-label">Language</label>
+        </div>
+        <div className="col col-9 mb-2">
+          <select onChange={(e) => setlanguage(e.target.value)} className="form-select" aria-label="Default select example" value={language}>
+      {
+        toursData.languages.map(e => <option value={e} key={e}>{e}</option>)
+      }
+        </select>
+        </div>
+        <div className="col col-3 mt-1">
+        <label htmlFor="exampleFormControlInput1" className="form-label">Availability</label>
+        </div>
+        <div className="col col-9 mb-2">
+          <select onChange={(e) => setTotalAvailability(+e.target.value)} className="form-select" aria-label="Default select example" value={totalAvailability}>
+          {
+            toursData.availability.map(e => <option value={e} key={e}>{e}</option>)
+          }
+          </select>
+        </div>
+        <div className="col col-3 mt-1">
+          <label htmlFor="exampleFormControlInput1" className="form-label">Price</label>
+        </div>
+        <div className="col col-9 mb-2">
+          <div className="input-group">
+            <input onChange={(e) => setPrice(+e.target.value)} type="number" className="form-control" placeholder="" min={700} max={2500} step={50} value={price}/>
+            <span className="input-group-text" id="basic-addon1">$</span>
+          </div>
+        </div>
+        <div className="col col-3 mt-1">
+          <label className="form-label">Status</label>
+        </div>
+        <div className="col col-9 mb-2">
+        <select onChange={(e) => setStatus(e.target.value)} className="form-select" value={status}>
+        {
+          toursData.status.map(e => <option value={e} key={e}>{e}</option>)
+        }
+        </select>
+        </div>
+        <div className={`col col-${isUpdate ? '4' : '6'} mb-1 px-2`}>
+          <button disabled={tour === null} onClick={!!isUpdate ? handleUpdate : handleAdd} className={`btn ${!!isUpdate ? 'btn-warning' : 'btn-success'}`} style={{width: '100%'}}>{!!isUpdate ? 'Update option' : 'Add option'}</button>
+        </div>
+        <div className={`col col-${isUpdate ? '4' : '6'} mb-1 px-2`}>
+        <button onClick={handleReset} className='btn btn-outline-secondary' style={{width: '100%'}}>Reset</button>
+        </div>
+
+        {
+          isUpdate && 
+          <div className="col col-4 mb-1 px-2">
+            <button onClick={handleCancel} className='btn btn-outline-danger' style={{width: '100%'}}>Cancel</button>
+          </div>
+        }
+
       </div>
-      ) 
-      : (
-        <>
-          <div className="row">
-            <div className="col col-lg-2 col-md-1 col-0"></div>
-            <div className="col col-lg-4 col-md-5 col-12">
-              <div className="mb-3">
-                <label htmlFor="exampleFormControlInput1" className="form-label">Deparcher date</label>
-                <input 
-                  onChange={(e) => setDepartureDate(e.target.value)} 
-                  type="date" 
-                  className="form-control" 
-                  placeholder="" 
-                  min={new Date().toISOString().split("T")[0]} 
-                  max={new Date(new Date().getFullYear(), new Date().getMonth() + 2, new Date().getDate()).toISOString().split("T")[0]}/>
-              </div>
-            </div>
-            <div className="col col-lg-4 col-md-5 col-12">
-              <div className="mb-3">
-              <label htmlFor="exampleFormControlInput1" className="form-label">Language</label>
-              <select onChange={(e) => setlanguage(e.target.value)} className="form-select" aria-label="Default select example">
-                {
-                  toursData.languages.map(e => <option value={e} key={e}>{e}</option>)
-                }
-              </select>
-              </div>
-            </div>
-            <div className="col col-lg-2 col-md-1 col-0"></div>
-
-            <div className="col col-lg-2 col-md-1 col-0"></div>
-            <div className="col col-lg-4 col-md-5 col-12">
-              <div className="mb-3">
-                <label htmlFor="exampleFormControlInput1" className="form-label">Total Availability</label>
-                <select onChange={(e) => setTotalAvailability(+e.target.value)} className="form-select" aria-label="Default select example">
-                {
-                  toursData.availability.map(e => <option value={e} key={e}>{e}</option>)
-                }
-              </select>
-              </div>
-            </div>
-            <div className="col col-lg-4 col-md-5 col-12">
-              <div className="mb-3">
-                <label htmlFor="exampleFormControlInput1" className="form-label">Price $</label>
-                <input onChange={(e) => setPrice(+e.target.value)} type="number" className="form-control" placeholder="" min={700} max={2500} step={50}/>
-              </div>
-            </div>
-            <div className="col ccol-lg-2 col-md-1 col-0"></div>
-
-            
-          </div>
-
-          <div className="row pt-3">
-            <div className="col col-md-3 col-2"></div>
-            <div className="col col-md-3 col-8">
-              <div className="mb-3">
-                <button onClick={handleAdd} type="button" className="btn btn-success " style={{width: '100%'}}>Add tour item</button>
-              </div>
-            </div>
-            <div className="col col-md-3 col-8">
-              <div className="mb-3">
-                <button onClick={handleReset} type="button" className="btn btn-outline-secondary" style={{width: '100%'}}>Reset</button>
-              </div>
-            </div>
-            <div className="col col-md-3 col-2"></div>
-          </div>
-        </>
-      )
-    }
+    </div>
   </div>
   )
 }

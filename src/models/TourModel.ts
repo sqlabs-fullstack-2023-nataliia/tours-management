@@ -6,6 +6,7 @@ export interface TourModel {
     destination: string,
     duration: number,
     image: string,
+    commission: number,
     // TODO
     // description: string[]
     tourItems: TourItemModel[]

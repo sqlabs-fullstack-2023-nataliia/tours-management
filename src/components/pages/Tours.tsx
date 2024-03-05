@@ -13,7 +13,7 @@ const Tours = () => {
     setIsLoading(true)
     const data = (await tourService.getAll()).request
     if(!data.empty) {
-      console.log(data.docs)
+      // console.log(data.docs)
       setTours(
         data.docs.map((doc) => ({
           id: doc.id,
@@ -21,7 +21,7 @@ const Tours = () => {
           destination: doc.data().destination, 
           duration: doc.data().duration,
           image: doc.data().image,
-          description: doc.data().description,
+          commission: doc.data().commission,
           tourItems: doc.data().tourItems
         }))
       );
@@ -29,18 +29,34 @@ const Tours = () => {
     setIsLoading(false)
   }
 
+  const removeTour = async (id: string) => {
+    setIsLoading(true)
+    await tourService.delete(id)
+    setIsLoading(false)
+    loadData()
+  }
+
+  const updateTour = () => {
+
+  }
+
   useEffect(() => {
     loadData()
   }, [])
-  
+
+
+
+
+
   return (
     <div className="container-fluid">
       <div className="row py-3 mb-2 px-2">
         <div className="col col-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>#</div>
-        <div className="col col-3" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Name</div>
+        <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Name</div>
         <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Destination</div>
         <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Duration</div>
-        <div className="col col-4"></div>
+        <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Commition</div>
+        <div className="col col-3"></div>
       </div>
       <div className='p-2' style={{background: 'white'}}>
       {
@@ -54,7 +70,7 @@ const Tours = () => {
           ? (<div className='container d-flex justify-content-center'><h2>No Tours Found</h2></div>) 
           : (
             tours.map((e, i) => {
-              return <TourItem tour={e} index={i + 1} key={e.id}/>
+              return <TourItem tour={e} index={i + 1} key={e.id} removeTour={removeTour}/>
             })
           )
         }

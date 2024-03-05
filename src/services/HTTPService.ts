@@ -1,9 +1,12 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
-import { database } from "./firebaseConfig";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+import { database, storage } from "./firebaseConfig";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 interface Entity {
     id: string;
-    [x: string]: unknown
+    image?: any
+    //[x: string]: unknown
+    [key: string]: any;
 }
 
 class HTTPService {
@@ -26,12 +29,31 @@ class HTTPService {
     }
 
     async add<T extends Entity>(entity: T) {
+        if(entity.image){
+            const storageRef = ref(storage, `gallery/${entity.image.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, entity.image);
+            const snapshot = await getDownloadURL(uploadTask.snapshot.ref)
+            entity.image = snapshot
+        }
+
         return await addDoc(collection(database, this.collection), entity)
     }
 
+    async get(id: string) {
+        const ref = doc(database, this.collection, id);
+        return await getDoc(ref);
+    }
+
     async update<T extends Entity>(entity: T) {
-        const ref = doc(database, this.collection, entity.id);
-        return await updateDoc(ref, entity);
+        if(entity.image){
+            const storageRef = ref(storage, `gallery/${entity.image.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, entity.image);
+            const snapshot = await getDownloadURL(uploadTask.snapshot.ref)
+            entity.image = snapshot
+        }
+    
+        const reff = doc(database, this.collection, entity.id);
+        return await updateDoc(reff, entity);
     }
 
 }
