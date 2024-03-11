@@ -1,0 +1,6 @@
+{
+    "languages": ["English", "Spanish", "French", "Russian", "Hebrew"],
+    "availability": [15, 20, 25, 30],
+    "status": ["pending", "available", "fully booked", "complited", "canceled"],
+    "commissionOptions": [5, 10, 15, 20, 25]
+}

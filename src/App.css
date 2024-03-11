@@ -1,8 +1,21 @@
 body {
-  background: rgb(248, 250, 251);
+  /* background: rgb(248, 250, 251); */
+  background: rgb(242, 245, 247);
 }
 
 .navbar {
   background-color: red;
   color: pink;
+}
+
+.card {
+  border-color: white;
+}
+
+.test {
+  background: rgb(251, 253, 255);
+}
+
+.accordion-item {
+  border: none;
 }

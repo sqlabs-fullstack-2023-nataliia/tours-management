@@ -1,8 +1,13 @@
+import { TourItemModel } from "./TourItemModel"
 
 export interface TourModel {
     id: string,
-    duration: number,
     name: string,
     destination: string,
-    price: number
+    duration: number,
+    image: string,
+    commission: number,
+    // TODO
+    // description: string[]
+    tourItems: TourItemModel[]
 }

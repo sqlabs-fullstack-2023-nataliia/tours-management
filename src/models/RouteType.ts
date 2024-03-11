@@ -4,5 +4,6 @@ export interface RouteType {
     path: string,
     label: string,
     element: ReactNode,
-    roles: string[]
+    roles: string[],
+    displayRole: string[]
 }

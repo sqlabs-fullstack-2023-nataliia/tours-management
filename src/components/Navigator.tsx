@@ -17,12 +17,12 @@ const Navigator = ({routes}: Props) => {
   return (
     <nav className="navbar bg-dark border-bottom border-body navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div className="container-fluid">
-            <a className="navbar-brand" href="#">EasyTrip.</a>
+            <a className="navbar-brand" href="/">EasyTrip.</a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
-                <div className="col col-11">
+                <div className="col col-10">
                 <ul className="navbar-nav">
                     {
                         routes.map(r => {
@@ -31,22 +31,27 @@ const Navigator = ({routes}: Props) => {
                         </li>
                         })
                     }
-                   
                 </ul>
                 </div>
 
-                <div className="col col-1">
+                <div className="col col-2">
                 <ul className="navbar-nav">
+                {
+                    user && <>
+                        <li className="nav-item" style={{alignItems: 'right'}}>
+                        <a className="nav-link active" aria-current="page" href={BASKET_PATH}>{user.firstName}</a>
+                        </li>
+                        <li className="nav-item" style={{alignItems: 'right'}}>
+                            <a className="nav-link active" aria-current="page" href={BASKET_PATH}><IoMdNotificationsOutline size={25}/></a>
+                        </li>
+                    </>
+                }
                 {
                     user && user.role === 'user' && <li className="nav-item" key={BASKET_PATH} style={{alignItems: 'right'}}>
                         <a className="nav-link active" aria-current="page" href={BASKET_PATH}><SlBasket size={25}/></a>
                     </li>
                 }
-                {
-                    user && <li className="nav-item" style={{alignItems: 'right'}}>
-                        <a className="nav-link active" aria-current="page" href={BASKET_PATH}><IoMdNotificationsOutline size={25}/></a>
-                </li>
-                }
+                
                 </ul>
                 </div>
             </div>
