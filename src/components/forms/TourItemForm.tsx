@@ -43,6 +43,7 @@ const AddTourItem = ({addTourItem, isUpdate, updateTourItem, tour}: Props) => {
       price: price,
       status: status
     })
+    handleReset()
   }
 
   const handleUpdate = () => {

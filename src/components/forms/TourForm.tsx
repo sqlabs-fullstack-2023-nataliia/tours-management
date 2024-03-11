@@ -16,6 +16,9 @@ const TourForm = ({isUpdate, saveTour, removeTour}: Props) => {
   const [duration, setDuration] = useState(isUpdate?.duration || 1)
   const [commission, setCommission] = useState(isUpdate?.commission || 5)
 
+
+  console.log("***** " + isUpdate?.id)
+
   const handleSave = () => {
     saveTour({
       id: isUpdate?.id || '',

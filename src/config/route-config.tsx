@@ -19,7 +19,7 @@ export const BASKET_PATH = '/basket';
 export const LOGIN_PATH = '/login';
 export const LOGOUT_PATH = '/logout';
 
-export const ADD_TOUR_PATH = '/tours/add';
+export const ADD_TOUR_PATH = '/tours/add-update/:tourId';
 export const TOURS_PATH = '/tours';
 export const TOUR_ITEMS_PATH = '/tour-items';
 export const ADD_USER_PATH = '/users/add';

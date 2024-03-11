@@ -3,24 +3,17 @@ import { TourModel } from '../../models/TourModel'
 import { TbPencil } from "react-icons/tb";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { IoMdAdd } from "react-icons/io";
-import { tourService } from '../../config/service-config';
-import TourForm from '../forms/TourForm';
+import { Link } from 'react-router-dom';
+import TourItemRow from './TourItemRow';
+
 
 interface Props {
     tour: TourModel
     index: number
     removeTour: (id: string) => void,
-    //updateTour: () => void
 }
-const TourItem = ({tour, index, removeTour}: Props) => {
 
-
-  const handleUpdate = async () => {
-
-  }
-
-
+const TourRow = ({tour, index, removeTour}: Props) => {
 
   return (
     <div className="row" >
@@ -29,29 +22,24 @@ const TourItem = ({tour, index, removeTour}: Props) => {
       <div className="col col-2">{tour.destination}</div>
       <div className="col col-2">{tour.duration} days</div>
       <div className="col col-2">{tour.commission} days</div>
-
       <div className="col col-1">
-        <button onClick={() => {}} className='btn'><TbPencil/></button>
+        <button className=" btn" type="button" data-bs-toggle="collapse" data-bs-target={`#${tour.id}`} aria-expanded="true" aria-controls={tour.id}><MdOutlineRemoveRedEye/></button>
+      </div>
+      <div className="col col-1">
+      <Link to={`add-update/${tour.id}`}>
+        <button onClick={() => {}} className='btn'> <TbPencil/></button>
+      </Link>
       </div>
       <div className="col col-1">
         <button className='btn' onClick={() => removeTour(tour.id)}><FaRegTrashAlt/></button>
-      </div>
-      <div className="col col-1">
-        <button className=" btn" type="button" data-bs-toggle="collapse" data-bs-target={`#${tour.id}`} aria-expanded="true" aria-controls={tour.id}><MdOutlineRemoveRedEye/></button>
       </div>
       <div className="accordion" id="accordionExample" >
         <div className="accordion-item" style={{background: 'rgb(242, 245, 247)'}}>
           <div id={tour.id} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div className="accordion-body" >
-             <ul>
-             {
-                tour.tourItems.map((tourItem, i) => {
-                  return <>
-                  <li key={tour.id + i}>{tourItem.departureDate} {tourItem.status}</li>
-                  </>
-                })
+              {
+                <TourItemRow tourItems={tour.tourItems} />
               }
-             </ul>
             </div>
           </div>
         </div>
@@ -60,7 +48,7 @@ const TourItem = ({tour, index, removeTour}: Props) => {
   )
 }
 
- export default TourItem
+ export default TourRow
 
 // interface Props {
 //   tour: TourModel

@@ -5,27 +5,46 @@ import TourItemRow from '../components/TourItemRow'
 import { TourItemModel } from '../../models/TourItemModel'
 import { TourModel } from '../../models/TourModel'
 import { tourService } from '../../config/service-config'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const AddTour = () => {
+
+    const navigate = useNavigate();
+    const { tourId } = useParams();
 
     const [isLoading, setIsLoading] = useState(false)
     const [tourItems, setTourItems] = useState<TourItemModel[]>([])
     const [tour, setTour] = useState<TourModel | null>(null);
     const [tourItem, setTourItem] = useState<TourItemModel | null>(null);
+
+    useEffect(() => {
+        (async () => {
+            setIsLoading(true)
+            const tourToUpdate = tourId && (await tourService.get(tourId)).data() as TourModel;
+            console.log('********')
+            console.log(tourToUpdate)
+            if(tourToUpdate){
+                setTour(tourToUpdate)
+                setTourItems(tourToUpdate.tourItems)
+            }
+            setIsLoading(false)
+        })();
+      }, [tourId]);
  
     const saveTour = async (tourUpdate: TourModel) => {
-        // TODO add validation
-        let res;
+        console.log(tourUpdate)
         setIsLoading(true)
         if(tour){
             console.log('update')
             await tourService.update(tourUpdate)
         } else {
             console.log('add')
-            res = await tourService.add(tourUpdate)
-            tourUpdate.id = res?.id ? res.id : ''; 
+            const id = await tourService.add(tourUpdate)
+            tourUpdate.id = id; 
+            navigate(`/tours/add-update/${tourUpdate.id}`);
         }
         setIsLoading(false)
+        console.log('tour update id ' + tourUpdate.id)
         setTour({...tourUpdate, tourItems: tourItems})
     }
 
@@ -39,11 +58,6 @@ const AddTour = () => {
     }
 
     const addTourItem = (tourItemUpdate: TourItemModel) => {
-        // TODO add validation
-        // setTour((prevTour) => ({
-        //     ...prevTour,
-        //     tourItems: [...prevTour.tourItems, tourItemUpdate!],
-        // }));
         setTourItems((prevTourItems) => [...prevTourItems, tourItemUpdate]);
     }
 
@@ -56,12 +70,10 @@ const AddTour = () => {
 
     const updateTourItem = (tourItemUpdate: TourItemModel | null) => {
         tourItemUpdate && setTourItems((prevTourItems) => [...prevTourItems.map((e) => e.id === tourItemUpdate.id ? tourItemUpdate : e)]);
-        // TODO update
         setTourItem(null)
     }
 
     const setUpdateTourItem = (tourItem: TourItemModel) => {
-        // TODO add validation
         setTourItem(tourItem)
     }
 

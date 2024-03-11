@@ -36,7 +36,11 @@ class HTTPService {
             entity.image = snapshot
         }
 
-        return await addDoc(collection(database, this.collection), entity)
+        const res = await addDoc(collection(database, this.collection), entity)
+        const reff = doc(database, this.collection, res.id);
+        entity.id = res.id
+        await updateDoc(reff, entity);
+        return res.id
     }
 
     async get(id: string) {
