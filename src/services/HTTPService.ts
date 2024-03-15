@@ -38,6 +38,7 @@ class HTTPService {
 
         const res = await addDoc(collection(database, this.collection), entity)
         const reff = doc(database, this.collection, res.id);
+        console.log()
         entity.id = res.id
         await updateDoc(reff, entity);
         return res.id
