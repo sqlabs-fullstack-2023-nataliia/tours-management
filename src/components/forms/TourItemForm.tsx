@@ -1,65 +1,103 @@
-import React, { useEffect, useState } from 'react'
-import toursData from '../../config/tours-data-config.json'
+import { useEffect, useState } from 'react'
+import { useTourStore } from '../../store/useTourStore';
+import { useTourSettingsStore } from '../../store/interfaces/useTourSettingsStore';
 import { TourItemModel } from '../../models/TourItemModel';
-import { TourModel } from '../../models/TourModel';
+import { tourService } from '../../config/service-config';
+import { settings } from 'firebase/analytics';
 
-interface Props {
-  tour: TourModel | null,
-  isUpdate: TourItemModel | null
-  addTourItem: (tourItem: TourItemModel) => void
-  updateTourItem: (tourItem: TourItemModel | null) => void
-}
+const AddTourItem = () => {
 
-const AddTourItem = ({addTourItem, isUpdate, updateTourItem, tour}: Props) => {
+  const settings = useTourSettingsStore((state) => state.settings)
+  const [isLoading, setIsLoading] = useState(false)
+  const tourSettings = useTourSettingsStore((state) => state.settings)
+  const tour = useTourStore((state) => state.tour)
+  const updateTour = useTourStore((state) => state.updateTour)
 
-  console.log(isUpdate)
+  // TODO remove functionality with tour items
+  //const tourItems = useTourStore((state) => state.tourItems)
+  const tourItem = useTourStore((state) => state.tourItem)
+  // const addTourItem = useTourStore((state) => state.addTourItem)
+  // const updateTourItem = useTourStore((state) => state.updateTourItem)
+  const setTourItem = useTourStore((state) => state.setTourItem)
 
-  const [departureDate, setDepartureDate] = useState(isUpdate?.departureDate || '');
-  const [language, setlanguage] = useState(isUpdate?.language || toursData.languages[0]);
-  const [totalAvailability, setTotalAvailability] = useState(isUpdate?.totalAvailability || 0);
-  const [price, setPrice] = useState(isUpdate?.price || 0);
-  const [status, setStatus] = useState(isUpdate?.status || toursData.status[0])
+ 
+  const initialTourItem: TourItemModel = tourItem || {
+    id: Date.now().toString(),
+    departureDate: new Date().toISOString().split("T")[0],
+    language: '',
+    totalAvailability: 0,
+    availability: 0,
+    price: settings?.price[0] || 0,
+    status: ''
+  }
+  // deep copy
+  const [currentTourItem, setCurrentTourItem] = useState<TourItemModel>(
+    tour ? JSON.parse(JSON.stringify(tour)) : { ...initialTourItem }
+  );
 
   const handleReset = () => {
-   console.log(' handle reset')
-    setDepartureDate(isUpdate?.departureDate || '')
-    setlanguage(isUpdate?.language || toursData.languages[0])
-    setTotalAvailability(isUpdate?.totalAvailability || 0)
-    setPrice(isUpdate?.price || 0)
-    setStatus(isUpdate?.status || toursData.status[0])
+    setCurrentTourItem(  tour ? JSON.parse(JSON.stringify(tour)) : { ...initialTourItem })
   }
 
   useEffect(() => {
     handleReset()
-  }, [isUpdate])
+  }, [tourItem])
 
-  const handleAdd = () => {
-    addTourItem({
-      id: Date.now().toString(),
-      departureDate: departureDate,
-      language: language,
-      totalAvailability: totalAvailability,
-      availability: totalAvailability,
-      price: price,
-      status: status
-    })
+  const handleAddUpdate = async () => {
+    //addTourItem(currentTourItem)
+    setIsLoading(true)
+
+    let updatedItems: TourItemModel[] = [...(tour?.tourItems ?? [])];
+    updatedItems.push(currentTourItem)
+    if (tour && typeof tour.id === 'string') {
+      updateTour({ ...tour, tourItems: updatedItems });
+      await tourService.update({ ...tour, tourItems: updatedItems })
+    }
     handleReset()
+    setTourItem(null)
+    setIsLoading(false)
   }
 
-  const handleUpdate = () => {
-    updateTourItem({
-        id: isUpdate?.id || '',
-        departureDate: departureDate,
-        language: language,
-        totalAvailability: totalAvailability,
-        availability: totalAvailability,
-        price: price,
-        status: status
-      })
-  }
+  // const handleUpdate = () => {
+  //   updateTourItem(currentTourItem)
+  //   setTourItem(null)
+  // }
 
   const handleCancel = () => {
-    updateTourItem(null)
+    setTourItem(null)
+  }
+  console.log(currentTourItem.departureDate)
+
+  const departureHandler = (event: any) => {
+    console.log(event.target.value)
+    console.log(new Date().toISOString().split("T")[0])
+    const tourItemCopy = {...currentTourItem};
+    tourItemCopy.departureDate = event.target.value;
+    setCurrentTourItem(tourItemCopy)
+  }
+
+  const languageHandler = (event: any) => {
+    const tourItemCopy = {...currentTourItem};
+    tourItemCopy.language = event.target.value;
+    setCurrentTourItem(tourItemCopy)
+  }
+
+  const availabilityHandler = (event: any) => {
+    const tourItemCopy = {...currentTourItem};
+    tourItemCopy.availability = +event.target.value;
+    setCurrentTourItem(tourItemCopy)
+  }
+
+  const priceHandler = (event: any) => {
+    const tourItemCopy = {...currentTourItem};
+    tourItemCopy.price = +event.target.value;
+    setCurrentTourItem(tourItemCopy)
+  }
+
+  const statusHandler = (event: any) => {
+    const tourItemCopy = {...currentTourItem};
+    tourItemCopy.status = event.target.value;
+    setCurrentTourItem(tourItemCopy)
   }
 
   return (
@@ -68,12 +106,12 @@ const AddTourItem = ({addTourItem, isUpdate, updateTourItem, tour}: Props) => {
     <h6 style={{fontWeight: 'bold'}}>Tour option</h6>
       <div className="row py-4" style={{background: 'rgb(251, 253, 255)', borderRadius: '15px'}}>
         <div className="col col-3 mt-1">
-        <label htmlFor="exampleFormControlInput1" className="form-label">Deparcher</label>
+        <label htmlFor="exampleFormControlInput1" className="form-label">Departure</label>
         </div>
         <div className="col col-9 mb-2">
       <input 
-        value={departureDate}
-        onChange={(e) => setDepartureDate(e.target.value)} 
+        value={currentTourItem.departureDate || ''}
+        onChange={departureHandler} 
         type="date" 
         className="form-control" 
         placeholder="" 
@@ -84,9 +122,9 @@ const AddTourItem = ({addTourItem, isUpdate, updateTourItem, tour}: Props) => {
         <label htmlFor="exampleFormControlInput1" className="form-label">Language</label>
         </div>
         <div className="col col-9 mb-2">
-          <select onChange={(e) => setlanguage(e.target.value)} className="form-select" aria-label="Default select example" value={language}>
+          <select onChange={languageHandler} className="form-select" aria-label="Default select example" value={currentTourItem.language}>
       {
-        toursData.languages.map(e => <option value={e} key={e}>{e}</option>)
+        tourSettings?.languages.map(e => <option value={e} key={e}>{e}</option>)
       }
         </select>
         </div>
@@ -94,9 +132,9 @@ const AddTourItem = ({addTourItem, isUpdate, updateTourItem, tour}: Props) => {
         <label htmlFor="exampleFormControlInput1" className="form-label">Availability</label>
         </div>
         <div className="col col-9 mb-2">
-          <select onChange={(e) => setTotalAvailability(+e.target.value)} className="form-select" aria-label="Default select example" value={totalAvailability}>
+          <select onChange={availabilityHandler} className="form-select" aria-label="Default select example" value={currentTourItem.availability}>
           {
-            toursData.availability.map(e => <option value={e} key={e}>{e}</option>)
+            tourSettings?.availability.map(e => <option value={e} key={e}>{e}</option>)
           }
           </select>
         </div>
@@ -105,7 +143,7 @@ const AddTourItem = ({addTourItem, isUpdate, updateTourItem, tour}: Props) => {
         </div>
         <div className="col col-9 mb-2">
           <div className="input-group">
-            <input onChange={(e) => setPrice(+e.target.value)} type="number" className="form-control" placeholder="" min={700} max={2500} step={50} value={price}/>
+            <input onChange={priceHandler} type="number" className="form-control" placeholder="" min={tourSettings?.price[0]} max={tourSettings?.price[1]} step={tourSettings?.price[2]} value={currentTourItem.price || 0}/>
             <span className="input-group-text" id="basic-addon1">$</span>
           </div>
         </div>
@@ -113,26 +151,25 @@ const AddTourItem = ({addTourItem, isUpdate, updateTourItem, tour}: Props) => {
           <label className="form-label">Status</label>
         </div>
         <div className="col col-9 mb-2">
-        <select onChange={(e) => setStatus(e.target.value)} className="form-select" value={status}>
+        <select onChange={statusHandler} className="form-select" value={status}>
         {
-          toursData.status.map(e => <option value={e} key={e}>{e}</option>)
+          tourSettings?.status.map(e => <option value={e} key={e}>{e}</option>)
         }
         </select>
         </div>
-        <div className={`col col-${isUpdate ? '4' : '6'} mb-1 px-2`}>
-          <button disabled={tour === null} onClick={!!isUpdate ? handleUpdate : handleAdd} className={`btn ${!!isUpdate ? 'btn-warning' : 'btn-success'}`} style={{width: '100%'}}>{!!isUpdate ? 'Update option' : 'Add option'}</button>
+        <div className={`col col-${tourItem ? '4' : '6'} mb-1 px-2`}>
+          <button disabled={tour === null} onClick={handleAddUpdate} className={`btn ${!!tourItem ? 'btn-warning' : 'btn-success'}`} style={{width: '100%'}}>{!!tourItem ? 'Update option' : 'Add option'}</button>
         </div>
-        <div className={`col col-${isUpdate ? '4' : '6'} mb-1 px-2`}>
+        <div className={`col col-${tourItem ? '4' : '6'} mb-1 px-2`}>
         <button onClick={handleReset} className='btn btn-outline-secondary' style={{width: '100%'}}>Reset</button>
         </div>
 
         {
-          isUpdate && 
+          tourItem && 
           <div className="col col-4 mb-1 px-2">
             <button onClick={handleCancel} className='btn btn-outline-danger' style={{width: '100%'}}>Cancel</button>
           </div>
         }
-
       </div>
     </div>
   </div>

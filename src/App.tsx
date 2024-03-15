@@ -9,14 +9,54 @@ import { auth, database } from './services/firebaseConfig'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { UserModel } from './models/UserModel'
 import { useUserStore } from './store/useUserStore'
+import { useTourStore } from './store/useTourStore'
+import { tourService, tourSettingsService } from './config/service-config'
+import { useTourSettingsStore } from './store/interfaces/useTourSettingsStore'
+import { TourSettingsModel } from './models/TourSettingsModel'
 
 const App = () => {
 
   const setCurrentUser = useUserStore((state) => state.setUser)
   const [user, setUser] = useState<UserModel | null>(null);
-  const relevantRoutes: RouteType[] 
-    = useMemo<RouteType[]>(() => getRelevantRoutes(user?.role || "any"), [user])
+  const setCurrentTours = useTourStore((state) => state.setTours)
+  const setTourSettings = useTourSettingsStore((state) => state.setSettings)
 
+  const relevantRoutes: RouteType[] 
+    = useMemo<RouteType[]>(() => getRelevantRoutes(user?.role || 'any'), [user])
+
+  useEffect(() => {
+    loadTours()
+    loadSettings()
+  }, [])
+
+  const loadTours = async () => {
+        //setIsLoading(true)
+        const data = (await tourService.getAll()).request
+        if(!data.empty) {
+          // console.log(data.docs)
+          setCurrentTours(
+            data.docs.map((doc) => ({
+              id: doc.id,
+              name: doc.data().name,
+              destination: doc.data().destination, 
+              duration: doc.data().duration,
+              image: doc.data().image,
+              commission: doc.data().commission,
+              tourItems: doc.data().tourItems
+            }))
+          );
+        }
+        //setIsLoading(false)
+  }
+
+  const loadSettings = async () => {
+    const data = (await tourSettingsService.getAll()).request
+        if(!data.empty) {
+          setTourSettings((data.docs[0]?.data() as TourSettingsModel) || null);
+        }
+  }
+    
+    
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       console.log("on auth state changed")
@@ -32,9 +72,10 @@ const App = () => {
           setUser(currentUser)
           setCurrentUser(currentUser)
         }
-      }
+      } 
     })
   }, [])
+
 
   return (
     <BrowserRouter>

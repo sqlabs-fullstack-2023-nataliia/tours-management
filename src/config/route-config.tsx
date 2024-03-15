@@ -9,8 +9,8 @@ import Tours from "../components/pages/Tours";
 import AddUser from "../components/forms/UserForm";
 import Users from "../components/pages/Users";
 import TourItems from "../components/pages/TourItems";
-import TourItemForm from "../components/forms/TourItemForm";
 import AddTour from "../components/pages/AddTour";
+import Settings from "../components/pages/Settings";
 
 
 export const HOME_PATH = '/';
@@ -24,6 +24,7 @@ export const TOURS_PATH = '/tours';
 export const TOUR_ITEMS_PATH = '/tour-items';
 export const ADD_USER_PATH = '/users/add';
 export const USERS_PATH = '/users'
+export const SETTINGS_PATH = '/settings'
 
 export const BOOKING_HISTORY_PATH = '/history';
 
@@ -37,6 +38,7 @@ export const ROUTES: RouteType[] = [
     {path: TOUR_ITEMS_PATH, label: 'Tour items', element: <TourItems/>, roles: ["admin"], displayRole: ["admin"]},
     {path: ADD_USER_PATH, label: 'Add user', element: <AddUser/>, roles: ["admin"], displayRole: [""]},
     {path: USERS_PATH, label: 'Users', element: <Users/>, roles: ["admin"], displayRole: [""]},
+    {path: SETTINGS_PATH, label: 'Settings', element: <Settings/>, roles: ['admin'], displayRole: ['admin']},
 
     {path: BOOKING_HISTORY_PATH, label: 'Booking history', element: <BookingHistory/>, roles: ["admin", "agent"], displayRole: ["agent"]},
 

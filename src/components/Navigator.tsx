@@ -1,4 +1,3 @@
-import React from 'react'
 import { RouteType } from '../models/RouteType'
 import { BASKET_PATH } from '../config/route-config'
 import { SlBasket } from "react-icons/sl";
@@ -13,7 +12,6 @@ const Navigator = ({routes}: Props) => {
 
     const user = useUserStore((state) => state.user)
 
-    
   return (
     <nav className="navbar bg-dark border-bottom border-body navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div className="container-fluid">
@@ -50,7 +48,7 @@ const Navigator = ({routes}: Props) => {
                     user && user.role === 'user' && <li className="nav-item" key={BASKET_PATH} style={{alignItems: 'right'}}>
                         <a className="nav-link active" aria-current="page" href={BASKET_PATH}><SlBasket size={25}/></a>
                     </li>
-                }
+                } 
                 
                 </ul>
                 </div>

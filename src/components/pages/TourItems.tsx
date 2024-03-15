@@ -2,35 +2,37 @@ import React, { useEffect, useState } from 'react'
 import { tourService } from '../../config/service-config';
 import { TourModel } from '../../models/TourModel';
 import TourItemRow from '../components/TourItemRow';
+import { useTourStore } from '../../store/useTourStore';
 
 const TourItems = () => {
 
   const [isLoading, setIsLoading] = useState(false);
-  const [tours, setTours] = useState<TourModel[]>([])
+  const tours = useTourStore((state) => state.tours)
+  //const [tours, setTours] = useState<TourModel[]>([])
 
-  const loadData = async () => {
-    setIsLoading(true)
-    const data = (await tourService.getAll()).request
-    if(!data.empty) {
-      console.log(data.docs)
-      setTours(
-        data.docs.map((doc) => ({
-          id: doc.id,
-          name: doc.data().name,
-          destination: doc.data().destination, 
-          duration: doc.data().duration,
-          image: doc.data().image,
-          description: doc.data().description,
-          tourItems: doc.data().tourItems
-        }))
-      );
-    }
-    setIsLoading(false)
-  }
+  // const loadData = async () => {
+  //   setIsLoading(true)
+  //   const data = (await tourService.getAll()).request
+  //   if(!data.empty) {
+  //     console.log(data.docs)
+  //     setTours(
+  //       data.docs.map((doc) => ({
+  //         id: doc.id,
+  //         name: doc.data().name,
+  //         destination: doc.data().destination, 
+  //         duration: doc.data().duration,
+  //         image: doc.data().image,
+  //         description: doc.data().description,
+  //         tourItems: doc.data().tourItems
+  //       }))
+  //     );
+  //   }
+  //   setIsLoading(false)
+  // }
 
-  useEffect(() => {
-    loadData()
-  }, [])
+  // useEffect(() => {
+  //   loadData()
+  // }, [])
 
   return (
     <div className="container-fluid">
@@ -53,7 +55,7 @@ const TourItems = () => {
         ? (<div className='container d-flex justify-content-center'><h2>No Tour items Found</h2></div>) 
         : (
           tours.map((e, i) => {
-            return <TourItemRow tour={e} index={i + 1} key={e.id}/>
+            return <TourItemRow tourItems={e} index={i + 1} key={e.id}/>
           })
         )
       }
