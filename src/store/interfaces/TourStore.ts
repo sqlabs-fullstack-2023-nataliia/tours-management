@@ -14,6 +14,6 @@ export default interface TourStore {
     tourItems: TourItemModel[],
     setTourItems: (tourItems: TourItemModel[]) => void
     addTourItem: (tourItem: TourItemModel) => void,
-    updateTourItem: (tourItem: TourItemModel) => void,
+    updateTourItems: (tourItem: TourItemModel) => void,
     deleteTourItem: (id: string) => void,
 }
