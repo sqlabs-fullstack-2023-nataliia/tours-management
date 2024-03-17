@@ -6,6 +6,7 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import { useTourStore } from '../../store/useTourStore';
 import { tourService } from '../../config/service-config';
+import TourItemRow from './TourItemsRow';
 
 
 interface Props {
@@ -18,6 +19,7 @@ const TourRow = ({tour, index}: Props) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const deleteTour = useTourStore((state) => state.deleteTour)
+  const setTourItems = useTourStore((state) => state.setTourItems)
   
   const removeTour = async (id: string) => {
     setIsLoading(true)
@@ -38,9 +40,9 @@ const TourRow = ({tour, index}: Props) => {
             <div className="col col-2">{tour.name}</div>
             <div className="col col-2">{tour.destination}</div>
             <div className="col col-2">{tour.duration} days</div>
-            <div className="col col-2">{tour.commission} days</div>
+            <div className="col col-2">{tour.commission} %</div>
             <div className="col col-1">
-              <button className=" btn" type="button" data-bs-toggle="collapse" data-bs-target={`#${tour.id}`} aria-expanded="true" aria-controls={tour.id}><MdOutlineRemoveRedEye/></button>
+              <button onClick={() => setTourItems(tour.tourItems)} className="btn" type="button" data-bs-toggle="collapse" data-bs-target={`#${tour.id}`} aria-expanded="true" aria-controls={tour.id}><MdOutlineRemoveRedEye/></button>
             </div>
             <div className="col col-1">
               <Link to={`add-update/${tour.id}`}>
@@ -55,7 +57,7 @@ const TourRow = ({tour, index}: Props) => {
                 <div id={tour.id} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                   <div className="accordion-body" >
                   {
-                  // <TourItemRow tourItems={tour.tourItems} />
+                   <TourItemRow viewMode={true}/>
                   }
                   </div>
                 </div>

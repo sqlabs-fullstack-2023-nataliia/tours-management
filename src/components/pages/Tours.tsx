@@ -12,7 +12,7 @@ const Tours = () => {
         <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Name</div>
         <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Destination</div>
         <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Duration</div>
-        <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Commition</div>
+        <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Commission</div>
         <div className="col col-3"></div>
       </div>
       <div className='p-2' style={{background: 'white'}}>

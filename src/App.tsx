@@ -14,6 +14,18 @@ import { tourService, tourSettingsService } from './config/service-config'
 import { useTourSettingsStore } from './store/interfaces/useTourSettingsStore'
 import { TourSettingsModel } from './models/TourSettingsModel'
 
+// const [user, setUser] = useState(null);
+
+// useEffect(() => {
+//   onAuthStateChanged(auth, (user) => {
+//     if (user) {
+//       setUser(user)
+//     } else {
+//       setUser(null);
+//     }
+//   })
+// }, [])
+
 const App = () => {
 
   const setCurrentUser = useUserStore((state) => state.setUser)
@@ -29,6 +41,17 @@ const App = () => {
     loadSettings()
   }, [])
 
+  // id: string,
+  // uid: string,
+  // name: string,
+  // destination: string,
+  // duration: number,
+  // image: string,
+  // commission: number,
+  // // TODO
+  // // description: string[]
+  // tourItems: TourItemModel[]
+
   const loadTours = async () => {
         //setIsLoading(true)
         const data = (await tourService.getAll()).request
@@ -37,6 +60,7 @@ const App = () => {
           setCurrentTours(
             data.docs.map((doc) => ({
               id: doc.id,
+              uid: doc.data().uid,
               name: doc.data().name,
               destination: doc.data().destination, 
               duration: doc.data().duration,

@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { database, storage } from "./firebaseConfig";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 
 interface Entity {
     id: string;
@@ -28,20 +28,42 @@ class HTTPService {
         return await deleteDoc(ref);
     }
 
-    async add<T extends Entity>(entity: T) {
-        if(entity.image){
-            const storageRef = ref(storage, `gallery/${entity.image.name}`);
-            const uploadTask = uploadBytesResumable(storageRef, entity.image);
-            const snapshot = await getDownloadURL(uploadTask.snapshot.ref)
-            entity.image = snapshot
-        }
 
-        const res = await addDoc(collection(database, this.collection), entity)
-        const reff = doc(database, this.collection, res.id);
-        console.log()
-        entity.id = res.id
-        await updateDoc(reff, entity);
-        return res.id
+    
+    
+
+    async add<T extends Entity>(entity: T) {
+        const storageRef = ref(storage, `gallery/${entity.image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, entity.image);
+
+        const uploadPromise = new Promise<void>((resolve, reject) => {
+            uploadTask.on("state_changed", (snapshot) => {},
+                (error) => {
+                    console.error(error);
+                    reject(error);
+                },
+                async () => {
+                    try {
+                        const downloadedURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        entity.image = downloadedURL;
+                        resolve();
+                    } catch (error: any) {
+                        console.error(error.message);
+                        reject(error);
+                    }
+            });
+        });
+
+        try {
+            entity.image && await uploadPromise;
+            const res = await addDoc(collection(database, this.collection), entity)
+            const reff = doc(database, this.collection, res.id);
+            entity.id = res.id
+            await updateDoc(reff, entity);
+            return entity
+        } catch (error: any) {
+            console.log(error.message)
+        }
     }
 
     async get(id: string) {
@@ -50,15 +72,33 @@ class HTTPService {
     }
 
     async update<T extends Entity>(entity: T) {
-        if(entity.image){
-            const storageRef = ref(storage, `gallery/${entity.image.name}`);
-            const uploadTask = uploadBytesResumable(storageRef, entity.image);
-            const snapshot = await getDownloadURL(uploadTask.snapshot.ref)
-            entity.image = snapshot
+        const storageRef = ref(storage, `gallery/${entity.image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, entity.image);
+
+        const uploadPromise = new Promise<void>((resolve, reject) => {
+            uploadTask.on("state_changed", (snapshot) => {},
+                (error) => {
+                    console.error(error);
+                    reject(error);
+                },
+                async () => {
+                    try {
+                        const downloadedURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        entity.image = downloadedURL;
+                        resolve();
+                    } catch (error: any) {
+                        console.error(error.message);
+                        reject(error);
+                    }
+            });
+        });
+
+        try {
+            const reff = doc(database, this.collection, entity.id);
+            return await updateDoc(reff, entity);
+        } catch (error: any) {
+            console.log(error.message)
         }
-    
-        const reff = doc(database, this.collection, entity.id);
-        return await updateDoc(reff, entity);
     }
 
 }
