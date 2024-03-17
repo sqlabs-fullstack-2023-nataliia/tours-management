@@ -1,5 +1,3 @@
-import React from 'react'
-import { useTourStore } from '../../store/useTourStore'
 import { TourModel } from '../../models/TourModel'
 
 // TODO take status from firebase + mb add color picker to settings
