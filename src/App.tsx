@@ -41,17 +41,6 @@ const App = () => {
     loadSettings()
   }, [])
 
-  // id: string,
-  // uid: string,
-  // name: string,
-  // destination: string,
-  // duration: number,
-  // image: string,
-  // commission: number,
-  // // TODO
-  // // description: string[]
-  // tourItems: TourItemModel[]
-
   const loadTours = async () => {
         //setIsLoading(true)
         const data = (await tourService.getAll()).request
