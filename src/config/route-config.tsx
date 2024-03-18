@@ -11,14 +11,17 @@ import Users from "../components/pages/Users";
 import TourItems from "../components/pages/TourItems";
 import AddTour from "../components/pages/AddTour";
 import Settings from "../components/pages/Settings";
+import TourPage from "../components/pages/TourPage";
 
 
 export const HOME_PATH = '/';
 export const BOOK_TOUR_PATH = '/tours/book';
+export const TOUR_VIEW_PATH = '/tours/book/:tourId'
 export const BASKET_PATH = '/basket';
 export const LOGIN_PATH = '/login';
 export const LOGOUT_PATH = '/logout';
 
+// TODO export const ADD_TOUR_PATH = '/tours/:tourId';
 export const ADD_TOUR_PATH = '/tours/add-update/:tourId';
 export const TOURS_PATH = '/tours';
 export const TOUR_ITEMS_PATH = '/tour-items';
@@ -31,6 +34,8 @@ export const BOOKING_HISTORY_PATH = '/history';
 export const ROUTES: RouteType[] = [
     {path: HOME_PATH, label: 'Home', element: <HomePage/>, roles: ["any", "user", "admin", "agent"], displayRole: ["user", "any"]},
     {path: BOOK_TOUR_PATH, label: 'Book a tour', element: <BookTour/>, roles: ["any", "user", "admin", "agent"], displayRole: ["user", "any", "agent"]},
+     //{path: TOUR_VIEW_PATH, label: 'Tour view', element: <TourPage/>, roles: ["any", "user", "admin", "agent"], displayRole: [""]},
+    {path: TOUR_VIEW_PATH, label: 'Tour view', element: <TourPage/>, roles: ["any", "user", "admin", "agent"], displayRole: ["agent"]},
     {path: BASKET_PATH, label: 'Basket', element: <Basket/>, roles: [""], displayRole: ["any", "user"]},
 
     {path: ADD_TOUR_PATH, label: 'Add tour', element: <AddTour/>, roles: ["admin"], displayRole: ["admin"]},
