@@ -96,8 +96,8 @@ const TourView = ({actualLanguages, minPrice}: Props) => {
                     ? (<>
                         <div className="container my-3 py-5" style={{background: 'rgb(237, 244, 252)', borderRadius: '15px'}}> 
                         <div className="row">
-                        <div className="col-5 my-2">
-                                <h6>Language:</h6>
+                            <div className="col-5 my-2">
+                            <h6>Language:</h6>
                             </div>
                             <div className="col-7 my-2">
                                 <h5>{language}</h5>
@@ -134,7 +134,7 @@ const TourView = ({actualLanguages, minPrice}: Props) => {
                             </div>
                         </div>
                             <div className="d-flex justify-content-center mt-3">
-                                <button onClick={() => navigate(`/tours/book/${tour?.id}/${tourItemId}`)} className='btn btn-primary mx-3 ' style={{width: '100%'}}>Book now</button>
+                                <button onClick={() => navigate(`/tours/book/${tour?.id}/${tourItemId}/${pax}`)} className='btn btn-primary mx-3 ' style={{width: '100%'}}>Book now</button>
                             </div>
                             <div className="d-flex justify-content-center mt-3">
                                 <button onClick={() => setCheckAvailability(!checkAvailability)} className='btn btn-outline-secondary mx-3 ' style={{width: '100%'}}>Go back</button>
