@@ -58,16 +58,22 @@ const TourPage = () => {
     }
     
   return (
-    <div className="container m-3 p-3" style={{borderRadius: '15px', background: 'white'}}>
-        {
-            isLoading 
-            ? (
-                <div className='container d-flex justify-content-center'>
-                    <div className="spinner-border text-secondary" role="status"></div>
+    <div className="container-fluid p-3">
+        <div className="row">
+            <div className="col">
+                <div className="container" style={{borderRadius: '15px', background: 'white', width: '100%'}}>
+                {
+                    isLoading 
+                    ? (
+                    <div className='container d-flex justify-content-center'>
+                        <div className="spinner-border text-secondary" role="status"></div>
+                    </div>
+                    ) 
+                    : (<TourView actualLanguages={languages} minPrice={minPrice}/>)
+                }
                 </div>
-            ) 
-            : (<TourView actualLanguages={languages} minPrice={minPrice}/>)
-        }
+            </div>
+        </div>
     </div>
   )
 }

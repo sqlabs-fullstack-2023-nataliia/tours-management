@@ -33,10 +33,10 @@ class HTTPService {
     
 
     async add<T extends Entity>(entity: T) {
-        const storageRef = ref(storage, `gallery/${entity.image.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, entity.image);
 
         const uploadPromise = new Promise<void>((resolve, reject) => {
+            const storageRef = ref(storage, `gallery/${entity.image.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, entity.image);
             uploadTask.on("state_changed", (snapshot) => {},
                 (error) => {
                     console.error(error);
@@ -55,7 +55,9 @@ class HTTPService {
         });
 
         try {
-            entity.image && await uploadPromise;
+            if(entity.image){
+                await uploadPromise;
+            }
             const res = await addDoc(collection(database, this.collection), entity)
             const reff = doc(database, this.collection, res.id);
             entity.id = res.id
@@ -72,10 +74,10 @@ class HTTPService {
     }
 
     async update<T extends Entity>(entity: T) {
-        const storageRef = ref(storage, `gallery/${entity.image.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, entity.image);
 
         const uploadPromise = new Promise<void>((resolve, reject) => {
+            const storageRef = ref(storage, `gallery/${entity.image.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, entity.image);
             uploadTask.on("state_changed", (snapshot) => {},
                 (error) => {
                     console.error(error);
@@ -94,6 +96,9 @@ class HTTPService {
         });
 
         try {
+            if(entity.image){
+                await uploadPromise;
+            }
             const reff = doc(database, this.collection, entity.id);
             return await updateDoc(reff, entity);
         } catch (error: any) {

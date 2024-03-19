@@ -107,6 +107,7 @@ const AddTourItem = () => {
           </div>
           <div className="col col-9 mb-2">
             <input
+              onKeyDown={(e) => {e.preventDefault()}} 
               value={currentTourItem.departureDate || ''}
               onChange={departureHandler}
               type="date"
@@ -140,7 +141,7 @@ const AddTourItem = () => {
           </div>
           <div className="col col-9 mb-2">
             <div className="input-group">
-              <input onChange={priceHandler} type="number" className="form-control" placeholder="" min={tourSettings?.price[0]} max={tourSettings?.price[1]} step={tourSettings?.price[2]} value={currentTourItem.price || 0} />
+              <input onKeyDown={(e) => {e.preventDefault()}}  onChange={priceHandler} type="number" className="form-control" placeholder="" min={tourSettings?.price[0]} max={tourSettings?.price[1]} step={tourSettings?.price[2]} value={currentTourItem.price || 0} />
               <span className="input-group-text" id="basic-addon1">$</span>
             </div>
           </div>
@@ -160,7 +161,6 @@ const AddTourItem = () => {
           <div className={`col col-${tourItem ? '4' : '6'} mb-1 px-2`}>
             <button onClick={handleReset} className='btn btn-outline-secondary' style={{ width: '100%' }}>Reset</button>
           </div>
-
           {
             tourItem &&
             <div className="col col-4 mb-1 px-2">

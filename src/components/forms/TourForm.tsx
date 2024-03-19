@@ -124,7 +124,7 @@ const TourForm = () => {
                 <label className="form-label">Duration</label>
               </div>
               <div className="col col-9 mb-2">
-                <input onChange={durationHandler} type="number" className="form-control" min={1} max={15} value={currentTour.duration} />
+                <input onKeyDown={(e) => {e.preventDefault()}} onChange={durationHandler} type="number" className="form-control" min={1} max={15} value={currentTour.duration} />
               </div>
               <div className="col col-3 mt-1">
                 <label className="form-label">Image</label>
