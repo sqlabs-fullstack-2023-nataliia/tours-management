@@ -1,23 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useTourStore } from '../../store/useTourStore'
-import { Link, useNavigate } from 'react-router-dom';
-
-interface Props {
-    actualLanguages: string,
-    minPrice: number
-}
+import { useNavigate } from 'react-router-dom';
 
 const DEFAULT_VALUE = 'Select option'
 const DEFAULT_AVAILABILITY = 15;
 
 
-const TourView = ({actualLanguages, minPrice}: Props) => {
+const TourView = () => {
 
     const navigate = useNavigate();
     const tour  = useTourStore((state) => state.tour)
     const tourItems = useTourStore((state) => state.tourItems)
 
     const [language, setLanguage] = useState('');
+    const [minPrice, setMinPrice] = useState(0)
+    const [languages, setLanguages] = useState<string[]>([])
     const [departure, setDeparture] = useState('');
     const [departures, setDepartures] = useState([...tourItems.map(e => e.departureDate)])
     const [pax, setPax] = useState(1)
@@ -25,6 +22,17 @@ const TourView = ({actualLanguages, minPrice}: Props) => {
     const [price, setPrice] = useState(0)
     const [checkAvailability, setCheckAvailability] = useState(false)
     const [tourItemId, setTourItemId] = useState('')
+
+    useEffect(() => {
+        if(tourItems.length !== 0){
+            const set = new Set<string>()
+            tourItems.forEach((item) => set.add(item.language))
+            setLanguages(Array.from(set))
+            console.log(tourItems)
+            const min = tourItems.reduce((res, tourItem) => tourItem.price < res ? tourItem.price : res, tourItems[0].price);
+            setMinPrice(min)
+        }
+    }, [])
 
     useEffect(() => {
         if(language){
@@ -79,7 +87,7 @@ const TourView = ({actualLanguages, minPrice}: Props) => {
                 <span style={{fontWeight: 'bold'}}> {tour?.duration} {tour?.duration || 0 > 1 ? 'days' : 'day'}</span>
             </p>
             <p>Offered in: 
-                <span style={{fontWeight: 'bold'}}> {actualLanguages}</span>
+                <span style={{fontWeight: 'bold'}}> {languages.reduce((res, curr) => res + curr + ' ', '')}</span>
             </p>
         </div>
         <div className="col col-lg-4 col-12">
@@ -137,7 +145,7 @@ const TourView = ({actualLanguages, minPrice}: Props) => {
                                 <button onClick={() => navigate(`/tours/book/${tour?.id}/${tourItemId}/${pax}`)} className='btn btn-primary mx-3 ' style={{width: '100%'}}>Book now</button>
                             </div>
                             <div className="d-flex justify-content-center mt-3">
-                                <button onClick={() => setCheckAvailability(!checkAvailability)} className='btn btn-outline-secondary mx-3 ' style={{width: '100%'}}>Go back</button>
+                                <button onClick={() => setCheckAvailability(!checkAvailability)} className='btn btn-outline-secondary mx-3 ' style={{width: '100%'}}>Reset</button>
                             </div>
                         </div>
                     </>) 
@@ -148,7 +156,7 @@ const TourView = ({actualLanguages, minPrice}: Props) => {
                             <select onChange={(e) => setLanguage(e.target.value)} className="form-control form-select " aria-label="Default select example">
                                 <option value="" >{DEFAULT_VALUE}</option>
                                 {
-                                    tourItems.map(e => e.language).map((e, i) => <option value={e} key={i}>{e}</option>)
+                                    languages.map((e, i) => <option value={e} key={i}>{e}</option>)
                                 }
                             </select>
                             <h6 className='mt-3' style={{fontWeight: 'bold'}}>Date</h6>

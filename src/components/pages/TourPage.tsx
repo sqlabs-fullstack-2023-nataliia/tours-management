@@ -5,19 +5,14 @@ import { tourService } from '../../config/service-config';
 import { TourModel } from '../../models/TourModel';
 import TourView from '../components/TourView';
 import { TourItemModel } from '../../models/TourItemModel';
-import { useTourSettingsStore } from '../../store/interfaces/useTourSettingsStore';
 
 const TourPage = () => {
 
     const { tourId } = useParams();
-
-    const settings = useTourSettingsStore((state) => state.settings)
     const setTour = useTourStore((state) => state.setTour)
     const setTourItems = useTourStore((state) => state.setTourItems)
 
     const [isLoading, setIsLoading] = useState(false)
-    const [languages, setLanguages] = useState(settings?.languages[0] || '')
-    const [minPrice, setMinPrice] = useState(settings?.price[0] || 0)
   
     useEffect(() => {
       (async () => {
@@ -35,26 +30,9 @@ const TourPage = () => {
     const getCurrentTourItems = (items: TourItemModel[]) => {
         let res: TourItemModel[] = []
         if(items.length > 0){
-            res = items.filter((e) => (new Date().toISOString().split("T")[0] < e.departureDate) && (e.status === 'Available' || 'Fully booked'));
-            setActualLanguages(items)
-            getMinPrice(res)
+            res = items.filter((e) => (new Date().toISOString().split("T")[0] < e.departureDate) && (e.status === 'Available'));
         }
         return res;
-    }
-
-    const setActualLanguages = (items: TourItemModel[]) => {
-        const res = items.reduce((res: string, curr) => !res.split(', ').includes(curr.language) 
-            ? (res += curr.language + ', ') 
-            : res, '').slice(0, -2)
-        res && setLanguages(res)
-    }
-
-    const getMinPrice = (items: TourItemModel[]) => {
-        let res = settings?.price[0] || 0
-        if(items.length > 0){
-            res = items.reduce((res, tourItem) => tourItem.price < res ? tourItem.price : res, items[0].price);
-        } 
-        setMinPrice(res)
     }
     
   return (
@@ -69,7 +47,7 @@ const TourPage = () => {
                         <div className="spinner-border text-secondary" role="status"></div>
                     </div>
                     ) 
-                    : (<TourView actualLanguages={languages} minPrice={minPrice}/>)
+                    : (<TourView />)
                 }
                 </div>
             </div>

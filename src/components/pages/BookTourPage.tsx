@@ -21,6 +21,7 @@ const BookTourPage = () => {
       if (currentTour) {
         setTour(currentTour)
         const currTourItem = currentTour.tourItems.find((e: any) => e.id == tourItemId)
+        
         currTourItem && setTourItem(currTourItem)
       }
       setIsLoading(false)
