@@ -11,6 +11,19 @@ interface Props {
     confirmationFn: (booking: BookingModel) => void
 }
 
+const options = [
+    "Adventure Seekers",
+    "Aanderlust Tours",
+    "Aaplorers Unlimited",
+    "Global Arekking",
+    "Discovery Expeditions",
+    "Journey Aasters",
+    "Voyage Ventures",
+    "Roaming Nomads",
+    "Wayfarer Adventures",
+    "Travel Troupe"
+  ];
+
 const CANCEL_COMFIRMATION_MESSAGE = 'Are you sure you want to cancel this booking? All your details will not be saved'
 
 const ConfirmationForm = ({customers, confirmationFn}: Props) => {
@@ -28,6 +41,8 @@ const ConfirmationForm = ({customers, confirmationFn}: Props) => {
         uid: user?.id,
         customers: customers
     })
+    const [tAgency, setTAgency] = useState('');
+    const [agencyOptions, setAgencyOptions] = useState<string[]>([])
 
     const handlePlaceOrder = async () => {
         setIsLoading(true)
@@ -49,6 +64,33 @@ const ConfirmationForm = ({customers, confirmationFn}: Props) => {
     const submitCancel = () => {
         navigate(`/tours/book/${tourId}`)
     }
+
+    const handleTAgency = (event: any) => {
+        const value = event.target.value;
+        setTAgency(value);
+    
+        const filtered = options.filter(option =>
+            option.toLowerCase().startsWith(value.toLowerCase())
+          );
+        setAgencyOptions(filtered);
+    }
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleDropdown = () => {
+        // TODO
+      if(tAgency){
+        setIsOpen(false);
+      } else {
+        setIsOpen(true)
+      }
+
+      // onClick={toggleDropdown}
+    };
+
+    const handleSerch = (agency: string) => {
+        setTAgency(agency)
+    }
     
   return (
     <>
@@ -63,7 +105,24 @@ const ConfirmationForm = ({customers, confirmationFn}: Props) => {
         : (
             <>
             {
-                user?.role === 'user' && <div>hello agent</div>
+                user?.role !== 'user' 
+                && 
+                <div className='container d-flex justify-content-center px-2 mt-2'>
+                    <div className="dropdown" onInput={toggleDropdown} >
+                        <input
+                            className="form-control"
+                            type="text"
+                            value={tAgency}
+                            onChange={handleTAgency}
+                            placeholder="Search..."
+                        />
+                        <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`}>
+                            {
+                                agencyOptions.map((e, i) => <li className="dropdown-item" key={i} onClick={() => handleSerch(e)}>{e}</li>)
+                            }
+                        </ul>
+                    </div>
+                </div>
             }
             <div className='container d-flex justify-content-center px-2 mt-2'>
                 <button onClick={handlePlaceOrder} className='btn btn-outline-success ' style={{width: '100%'}}>Confirm</button>

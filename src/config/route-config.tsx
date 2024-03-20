@@ -37,8 +37,8 @@ export const ROUTES: RouteType[] = [
     {path: HOME_PATH, label: 'Home', element: <HomePage/>, roles: ["any", "user", "admin", "agent"], displayRole: ["user", "any", "agent", "admin"]},
     {path: TOURS_VIEW_PATH, label: 'Tours', element: <BookTour/>, roles: ["any", "user", "admin", "agent"], displayRole: ["user", "any", "agent"]},
      //{path: TOUR_VIEW_PATH, label: 'Tour view', element: <TourPage/>, roles: ["any", "user", "admin", "agent"], displayRole: [""]},
-    {path: TOUR_VIEW_PATH, label: 'Tour view', element: <TourPage/>, roles: ["any", "user", "admin", "agent"], displayRole: ["agent"]},
-    {path: BOOK_TOUR_PATH, label: 'Book tour', element: <BookTourPage/>, roles: ["user", "admin", "agent"], displayRole: ["agent"]},
+    {path: TOUR_VIEW_PATH, label: 'Tour view', element: <TourPage/>, roles: ["any", "user", "admin", "agent"], displayRole: ["agent", "user"]},
+    {path: BOOK_TOUR_PATH, label: 'Book tour', element: <BookTourPage/>, roles: ["user", "admin", "agent"], displayRole: ["agent", "user"]},
     {path: BASKET_PATH, label: 'Basket', element: <Basket/>, roles: [""], displayRole: ["any", "user"]},
 
     {path: ADD_TOUR_PATH, label: 'Add tour', element: <AddTour/>, roles: ["admin"], displayRole: ["admin"]},

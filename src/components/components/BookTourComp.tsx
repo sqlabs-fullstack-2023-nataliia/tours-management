@@ -37,7 +37,6 @@ const BookTourComp = () => {
     const submitCustomer = (customer: CustomerModel) => {
         setPaxCount(paxCount + 1)
         setCustomers((prevCustomers) => [...prevCustomers, customer]);
-        console.log(customer)
     }
 
     const confirmationFn = async(booking: BookingModel) => {

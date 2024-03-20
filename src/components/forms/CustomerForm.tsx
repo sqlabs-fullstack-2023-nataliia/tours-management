@@ -41,7 +41,6 @@ const CustomerForm = ({ submitCustomer, count }: Props) => {
 
     const firstNameHandler = (event: any) => {
         const value = event.target.value
-        // TODO alow spaces
         if (value.length < 30 && /^[a-zA-Z -]+$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.firstName = value;
@@ -51,7 +50,6 @@ const CustomerForm = ({ submitCustomer, count }: Props) => {
 
     const lastNameHandler = (event: any) => {
         const value = event.target.value
-        // TODO alow spaces
         if (value.length < 30 && /^[a-zA-Z -]+$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.lastName = value;
@@ -76,7 +74,6 @@ const CustomerForm = ({ submitCustomer, count }: Props) => {
     }
 
     const dateOfBirthHandler = (event: any) => {
-        // TODO - not empty
         const value = event.target.value
         const customerCopy = { ...customer };
         customerCopy.dateOfBirth = value;
@@ -84,7 +81,6 @@ const CustomerForm = ({ submitCustomer, count }: Props) => {
     }
 
     const nationalityHandler = (event: any) => {
-        // TODO alow spaces
         const value = event.target.value
         if (value.length < 30 && /^[a-zA-Z -]+$/.test(value)) {
             const customerCopy = { ...customer };
@@ -95,12 +91,9 @@ const CustomerForm = ({ submitCustomer, count }: Props) => {
 
     const submitFn = () => {
         if (validateInput()) {
-            console.log("valid")
             setIsInputValid(true)
             setMessages([CUSTOMER_ADDED_MESSAGE])
-        } else {
-            console.log(' not valid')
-        }
+        } 
     }
 
     const addCustomer = () => {

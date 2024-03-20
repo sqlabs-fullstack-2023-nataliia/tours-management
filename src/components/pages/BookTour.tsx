@@ -1,10 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTourStore } from '../../store/useTourStore'
 
 const BookTour = () => {
 
   const tours = useTourStore((state) => state.tours)
-  console.log(tours)
   const navigator = useNavigate();
 
   return (
