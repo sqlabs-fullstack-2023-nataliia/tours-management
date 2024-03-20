@@ -54,11 +54,13 @@ const AddTourItem = () => {
 
   const handleAdd = async () => {
     addTourItem(currentTourItem)
+    await updateCurrentTour()
     handleReset()
   }
 
   const handleUpdate = async () => {
     updateTourItem(currentTourItem)
+    await updateCurrentTour()
     setTourItem(null)
   }
 
@@ -67,18 +69,21 @@ const AddTourItem = () => {
   }
 
   const departureHandler = (event: any) => {
+    // TODO validation
     const tourItemCopy = { ...currentTourItem };
     tourItemCopy.departureDate = event.target.value;
     setCurrentTourItem(tourItemCopy)
   }
 
   const languageHandler = (event: any) => {
+        // TODO validation
     const tourItemCopy = { ...currentTourItem };
     tourItemCopy.language = event.target.value;
     setCurrentTourItem(tourItemCopy)
   }
 
   const availabilityHandler = (event: any) => {
+        // TODO validation
     const tourItemCopy = { ...currentTourItem };
     tourItemCopy.availability = +event.target.value;
     tourItemCopy.totalAvailability = +event.target.value;
@@ -86,12 +91,14 @@ const AddTourItem = () => {
   }
 
   const priceHandler = (event: any) => {
+        // TODO validation
     const tourItemCopy = { ...currentTourItem };
     tourItemCopy.price = +event.target.value;
     setCurrentTourItem(tourItemCopy)
   }
 
   const statusHandler = (event: any) => {
+        // TODO validation
     const tourItemCopy = { ...currentTourItem };
     tourItemCopy.status = event.target.value;
     setCurrentTourItem(tourItemCopy)
@@ -107,7 +114,7 @@ const AddTourItem = () => {
           </div>
           <div className="col col-9 mb-2">
             <input
-              onKeyDown={(e) => {e.preventDefault()}} 
+              onKeyDown={(e) => { e.preventDefault() }}
               value={currentTourItem.departureDate || ''}
               onChange={departureHandler}
               type="date"
@@ -141,7 +148,7 @@ const AddTourItem = () => {
           </div>
           <div className="col col-9 mb-2">
             <div className="input-group">
-              <input onKeyDown={(e) => {e.preventDefault()}}  onChange={priceHandler} type="number" className="form-control" placeholder="" min={tourSettings?.price[0]} max={tourSettings?.price[1]} step={tourSettings?.price[2]} value={currentTourItem.price || 0} />
+              <input onKeyDown={(e) => { e.preventDefault() }} onChange={priceHandler} type="number" className="form-control" placeholder="" min={tourSettings?.price[0]} max={tourSettings?.price[1]} step={tourSettings?.price[2]} value={currentTourItem.price || 0} />
               <span className="input-group-text" id="basic-addon1">$</span>
             </div>
           </div>

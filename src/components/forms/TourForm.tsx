@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTourStore } from '../../store/useTourStore'
 import { tourService } from '../../config/service-config'
 import { useNavigate } from 'react-router-dom'
@@ -25,7 +25,7 @@ const TourForm = () => {
     destination: tour?.destination || '',
     image: tour?.image || '',
     duration: tour?.duration || 1,
-    tourItems: tour?.tourItems || [],
+    tourItems: tour?.tourItems || [], 
     commission: tour?.commission || tourSettings?.commission[0] || 0,
 
   });
@@ -46,15 +46,16 @@ const TourForm = () => {
     if (currentTour.id) {
       updateTour(currentTour)
       await tourService.update(currentTour)
+      
     } else {
       const res = await tourService.add(currentTour)
-      if(res){
+      if (res) {
         currentTour.id = res.id
         currentTour.image = res.image
         addTour(res)
         navigate(`/tours/add-update/${res.id}`);
       } else {
-        // TODO add toastify
+        // TODO add modal
         console.log('new tour was not added')
       }
     }
@@ -75,24 +76,28 @@ const TourForm = () => {
   }
 
   const destinationHandler = (event: any) => {
+        // TODO validation
     const tourCopy = { ...currentTour };
     tourCopy.destination = event.target.value;
     setCurrentTour(tourCopy)
   }
 
   const durationHandler = (event: any) => {
+        // TODO validation
     const tourCopy = { ...currentTour };
     tourCopy.duration = +event.target.value;
     setCurrentTour(tourCopy)
   }
 
   const imageHandler = (event: any) => {
+        // TODO validation
     const tourCopy = { ...currentTour };
     tourCopy.image = event.target.files?.[0];
     setCurrentTour(tourCopy)
   }
 
   const commitionHandler = (event: any) => {
+        // TODO validation
     const tourCopy = { ...currentTour };
     tourCopy.commission = +event.target.value;
     setCurrentTour(tourCopy)
@@ -124,13 +129,13 @@ const TourForm = () => {
                 <label className="form-label">Duration</label>
               </div>
               <div className="col col-9 mb-2">
-                <input onKeyDown={(e) => {e.preventDefault()}} onChange={durationHandler} type="number" className="form-control" min={1} max={15} value={currentTour.duration} />
+                <input onKeyDown={(e) => { e.preventDefault() }} onChange={durationHandler} type="number" className="form-control" min={1} max={15} value={currentTour.duration} />
               </div>
               <div className="col col-3 mt-1">
                 <label className="form-label">Image</label>
               </div>
               <div className="col col-9 mb-2">
-                <input onChange={imageHandler} type="file" className="form-control" name={'no name'} />
+                <input  onChange={imageHandler} type="file" className="form-control" name={'no name'} />
               </div>
               <div className="col col-3 mt-1">
                 <label className="form-label">Commission</label>
@@ -155,7 +160,7 @@ const TourForm = () => {
           </div>)
       }
 
-      <InfoModal messages={['hello']} status={'test'} hidden={false} />
+      <InfoModal messages={['hello']} />
 
       {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Launch demo modal
