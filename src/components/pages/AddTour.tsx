@@ -45,7 +45,6 @@ const AddTour = () => {
               <div className="row">
                 <TourItemRow />
               </div>
-
               <div className="row my-5">
                 <div className="col col-lg-9 col-md-8 col-6"></div>
                 <div className="col col-lg-3 col-md-4 col-6">

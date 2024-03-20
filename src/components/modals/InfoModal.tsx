@@ -4,7 +4,8 @@ interface Props {
     header?: string,
     messages: string[],
     submitFn?: (() => void) | null,
-    cancelFn?: (() => void) | null
+    cancelFn?: (() => void) | null,
+
 }
 
 const InfoModal = ({ header, messages, submitFn, cancelFn }: Props) => {
@@ -26,7 +27,7 @@ const InfoModal = ({ header, messages, submitFn, cancelFn }: Props) => {
                     </div>
                     <div className="modal-footer">
                         {!!cancelFn && <button onClick={cancelFn} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Go Back</button>}
-                        {!!submitFn && <button onClick={submitFn} type="button" className="btn btn-primary" data-bs-dismiss="modal">Save changes</button>}
+                        {!!submitFn && <button onClick={submitFn} type="button" className="btn btn-primary" data-bs-dismiss="modal">Confirm</button>}
                     </div>
                 </div>
             </div>
