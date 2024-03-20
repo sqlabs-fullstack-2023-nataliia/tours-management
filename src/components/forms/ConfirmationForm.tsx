@@ -3,18 +3,24 @@ import { CustomerModel } from '../../models/CustomerModel'
 import { useUserStore } from '../../store/useUserStore'
 import { useNavigate, useParams } from 'react-router-dom'
 import { tourBookingService } from '../../config/service-config'
+import InfoModal from '../modals/InfoModal'
+import { BookingModel } from '../../models/BookingModel'
 
 interface Props {
-    customers: CustomerModel[]
+    customers: CustomerModel[],
+    confirmationFn: (booking: BookingModel) => void
 }
 
-const ConfirmationForm = ({customers}: Props) => {
+const CANCEL_COMFIRMATION_MESSAGE = 'Are you sure you want to cancel this booking? All your details will not be saved'
+
+const ConfirmationForm = ({customers, confirmationFn}: Props) => {
 
     const navigate = useNavigate()
     const { tourId } = useParams()
     const { tourItemId } = useParams()
     const user = useUserStore((state) => state.user)
     const [isLoading, setIsLoading] = useState(false)
+    const [message, setMessage] = useState<string[]>([])
     const [booking, setBooking] = useState({
         id: '',
         tourId: tourId,
@@ -26,7 +32,7 @@ const ConfirmationForm = ({customers}: Props) => {
     const handlePlaceOrder = async () => {
         setIsLoading(true)
         const res = await tourBookingService.add(booking)
-        console.log(res)
+        confirmationFn(res as BookingModel)
         if(res){
             setBooking(prevBooking => ({
                 ...prevBooking,
@@ -34,6 +40,14 @@ const ConfirmationForm = ({customers}: Props) => {
               }));
         }
         setIsLoading(false)
+    }
+
+    const handleCancel = () => {
+        setMessage([CANCEL_COMFIRMATION_MESSAGE])
+    }
+
+    const submitCancel = () => {
+        navigate(`/tours/book/${tourId}`)
     }
     
   return (
@@ -55,8 +69,11 @@ const ConfirmationForm = ({customers}: Props) => {
                 <button onClick={handlePlaceOrder} className='btn btn-outline-success ' style={{width: '100%'}}>Confirm</button>
             </div>
             <div className='container d-flex justify-content-center px-2 mt-2'>
-                <button onClick={() => navigate(`/tours/book/${tourId}`)} className='btn btn-outline-danger ' style={{width: '100%'}}>Cancel</button>
-            </div></>
+                <button onClick={handleCancel} className='btn btn-outline-danger ' style={{width: '100%'}} data-bs-toggle="modal" data-bs-target="#exampleModal">Cancel</button>
+            </div>
+
+            <InfoModal messages={message} submitFn={submitCancel} cancelFn={() => {}} />
+            </>
         )
        }
     </div>
