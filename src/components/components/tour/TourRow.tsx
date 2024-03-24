@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { TourModel } from '../../models/TourModel'
+import { TourModel } from '../../../models/TourModel'
 import { TbPencil } from "react-icons/tb";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Link } from 'react-router-dom';
-import { useTourStore } from '../../store/useTourStore';
-import { tourService } from '../../config/service-config';
+import { useTourStore } from '../../../store/useTourStore';
+import { tourService } from '../../../config/service-config';
 import TourItemRow from './TourItemsRow';
+import { useTourItemStore } from '../../../store/useTourItemStore';
 
 
 interface Props {
@@ -19,7 +20,7 @@ const TourRow = ({tour, index}: Props) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const deleteTour = useTourStore((state) => state.deleteTour)
-  const setTourItems = useTourStore((state) => state.setTourItems)
+  const setTourItems = useTourItemStore((state) => state.setTourItems)
   
   const removeTour = async (id: string) => {
     setIsLoading(true)

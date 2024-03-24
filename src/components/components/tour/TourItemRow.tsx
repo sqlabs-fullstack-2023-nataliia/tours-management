@@ -1,4 +1,4 @@
-import { TourItemView } from '../../models/TourItemView'
+import { TourItemView } from '../../../models/TourItemView'
 
 // TODO take status from firebase + mb add color picker to settings
 const statusColor: { [key: string]: string } = {
@@ -23,7 +23,7 @@ const TourItemRow = ({tourItemsView}: Props) => {
           return <div className="row p-2" key={item.id} style={{ background: statusColor[item.status] }}>
           <div className="col col-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>{item.name}</div>
           <div className="col col-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
-              <img src={item.image} rel='image' style={{ width: '100%' }}/>
+              <img src={item.image} rel='image' style={{ width: '100%', height: '50px' }}/>
           </div>
           <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>{item.language}</div>
           <div className="col col-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>{item.duration}</div>

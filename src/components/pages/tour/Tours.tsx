@@ -1,5 +1,5 @@
-import TourRow from '../components/TourRow';
-import { useTourStore } from '../../store/useTourStore';
+import TourRow from '../../components/tour/TourRow';
+import { useTourStore } from '../../../store/useTourStore';
 
 const Tours = () => {
 

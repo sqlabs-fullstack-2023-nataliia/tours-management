@@ -1,18 +1,18 @@
 import Basket from "../components/pages/Basket";
-import BookTour from "../components/pages/BookTour";
+import BookTour from "../components/pages/booking/BookTour";
 import BookingHistory from "../components/pages/BookingHistory";
 import HomePage from "../components/pages/HomePage";
 import Login from "../components/forms/LoginForm";
 import Logout from "../components/pages/Logout";
 import { RouteType } from "../models/RouteType";
-import Tours from "../components/pages/Tours";
+import Tours from "../components/pages/tour/Tours";
 import AddUser from "../components/forms/UserForm";
 import Users from "../components/pages/Users";
-import TourItems from "../components/pages/TourItems";
-import AddTour from "../components/pages/AddTour";
+import TourItems from "../components/pages/tour/TourItems";
+import AddTour from "../components/pages/tour/AddTour";
 import Settings from "../components/pages/Settings";
-import TourPage from "../components/pages/TourPage";
-import BookTourPage from "../components/pages/BookTourPage";
+import TourPage from "../components/pages/booking/TourPage";
+import BookTourPage from "../components/pages/booking/BookTourPage";
 
 
 export const HOME_PATH = '/';

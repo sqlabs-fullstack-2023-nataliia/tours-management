@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import TextInputForm from '../components/TextInputForm';
-import { useTourSettingsStore } from '../../store/interfaces/useTourSettingsStore';
+import TextInputForm from '../forms/settings/TextInputForm';
+import { useTourSettingsStore } from '../../store/useTourSettingsStore';
 import { TourSettingsModel } from '../../models/TourSettingsModel';
-import NumberInputForm from '../components/NumberInputForm';
+import NumberInputForm from '../forms/settings/NumberInputForm';
 import { tourSettingsService } from '../../config/service-config';
 import { auth } from '../../services/firebaseConfig';
-import NumberInputLimitForm from '../components/NumberInputLimitForm';
+import NumberInputLimitForm from '../forms/settings/NumberInputLimitForm';
 
 const Settings = () => {
 

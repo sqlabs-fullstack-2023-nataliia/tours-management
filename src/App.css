@@ -13,7 +13,7 @@ body {
 }
 
 .test {
-  background: rgb(226, 231, 236);
+  background: rgb(18, 135, 39);
 }
 
 .accordion-item {
@@ -25,3 +25,17 @@ body {
   background: white;
   border-radius: 15px;
 }
+
+#video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  z-index: -1;
+}
+
+.main_header:hover {
+  background: rgb(255, 255, 255, 0.6);
+}
+
+

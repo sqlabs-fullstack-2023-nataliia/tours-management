@@ -6,5 +6,5 @@ export interface UserModel {
     lastName: string,
     email: string,
     role: 'admin' | 'agent' | 'user',
-    tourAgent?: string
+    tourAgency?: string
 }

@@ -11,21 +11,8 @@ import { UserModel } from './models/UserModel'
 import { useUserStore } from './store/useUserStore'
 import { useTourStore } from './store/useTourStore'
 import { tourService, tourSettingsService } from './config/service-config'
-import { useTourSettingsStore } from './store/interfaces/useTourSettingsStore'
+import { useTourSettingsStore } from './store/useTourSettingsStore'
 import { TourSettingsModel } from './models/TourSettingsModel'
-import { ToastContainer } from 'react-toastify'
-
-// const [user, setUser] = useState(null);
-
-// useEffect(() => {
-//   onAuthStateChanged(auth, (user) => {
-//     if (user) {
-//       setUser(user)
-//     } else {
-//       setUser(null);
-//     }
-//   })
-// }, [])
 
 const App = () => {
 
@@ -33,20 +20,20 @@ const App = () => {
   const [user, setUser] = useState<UserModel | null>(null);
   const setCurrentTours = useTourStore((state) => state.setTours)
   const setTourSettings = useTourSettingsStore((state) => state.setSettings)
+  const [isLoading, setIsLoading] = useState(false)
 
   const relevantRoutes: RouteType[]
     = useMemo<RouteType[]>(() => getRelevantRoutes(user?.role || 'any'), [user])
 
   useEffect(() => {
-    loadTours()
-    loadSettings()
+     loadTours()
+     loadSettings()
   }, [])
 
   const loadTours = async () => {
-    //setIsLoading(true)
+    setIsLoading(true)
     const data = (await tourService.getAll()).request
     if (!data.empty) {
-      // console.log(data.docs)
       setCurrentTours(
         data.docs.map((doc) => ({
           id: doc.id,
@@ -60,7 +47,7 @@ const App = () => {
         }))
       );
     }
-    //setIsLoading(false)
+    setIsLoading(false)
   }
 
   const loadSettings = async () => {
@@ -93,10 +80,23 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Navigator routes={relevantRoutes} />
-      <Routes>
-        {getRoutes(relevantRoutes)}
-      </Routes>
+    {
+      isLoading 
+      ? (
+        <div className='container d-flex justify-content-center mt-5'>
+          <div className="spinner-border text-secondary" role="status"></div>
+        </div>
+      ) 
+      : (
+        <>
+        <Navigator routes={relevantRoutes} />
+          <Routes>
+            {getRoutes(relevantRoutes)}
+          </Routes>
+        </>
+      )
+    }
+      
     </BrowserRouter>
   )
 }

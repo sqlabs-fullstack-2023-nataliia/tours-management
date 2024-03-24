@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useTourStore } from '../../store/useTourStore'
 import { useNavigate } from 'react-router-dom';
+import { useRelevantToursStore } from '../../../store/useRelevantToursStore';
+import { useRelevantTourItemsStore } from '../../../store/useRelevantTourItemsStore';
 
 const DEFAULT_VALUE = 'Select option'
 const DEFAULT_AVAILABILITY = 15;
@@ -9,14 +10,14 @@ const DEFAULT_AVAILABILITY = 15;
 const TourView = () => {
 
     const navigate = useNavigate();
-    const tour  = useTourStore((state) => state.tour)
-    const tourItems = useTourStore((state) => state.tourItems)
+    const relevantTour = useRelevantToursStore((state) => state.relevantTour)
+    const relevantTourItems = useRelevantTourItemsStore((state) => state.relevantTourItems)
 
     const [language, setLanguage] = useState('');
     const [minPrice, setMinPrice] = useState(0)
     const [languages, setLanguages] = useState<string[]>([])
     const [departure, setDeparture] = useState('');
-    const [departures, setDepartures] = useState([...tourItems.map(e => e.departureDate)])
+    const [departures, setDepartures] = useState([...relevantTourItems.map(e => e.departureDate)])
     const [pax, setPax] = useState(1)
     const [maxPax, setMaxPax] = useState<number>(DEFAULT_AVAILABILITY)
     const [price, setPrice] = useState(0)
@@ -24,29 +25,29 @@ const TourView = () => {
     const [tourItemId, setTourItemId] = useState('')
 
     useEffect(() => {
-        if(tourItems.length !== 0){
+        if(relevantTourItems.length !== 0){
             const set = new Set<string>()
-            tourItems.forEach((item) => set.add(item.language))
+            relevantTourItems.forEach((item) => set.add(item.language))
             setLanguages(Array.from(set))
-            console.log(tourItems)
-            const min = tourItems.reduce((res, tourItem) => tourItem.price < res ? tourItem.price : res, tourItems[0].price);
+            console.log(relevantTourItems)
+            const min = relevantTourItems.reduce((res, tourItem) => tourItem.price < res ? tourItem.price : res, relevantTourItems[0].price);
             setMinPrice(min)
         }
     }, [])
 
     useEffect(() => {
         if(language){
-            const currItems = tourItems.filter((e) => e.language === language)
+            const currItems = relevantTourItems.filter((e) => e.language === language)
             setDepartures(currItems.map(e => e.departureDate))
         } else {
-            setDepartures(tourItems.map(e => e.departureDate))
+            setDepartures(relevantTourItems.map(e => e.departureDate))
         }
         !checkAvailability && setDeparture('')
     }, [language])
 
     useEffect(() => {
         if(departure){
-            const currItem = tourItems.find((e) => e.language === language && e.departureDate === departure)
+            const currItem = relevantTourItems.find((e) => e.language === language && e.departureDate === departure)
             if(currItem){
                 setMaxPax(currItem.availability)
                 setTourItemId(currItem.id)
@@ -60,7 +61,7 @@ const TourView = () => {
     const getReturningDate = () => {
         let date = new Date(departure)
         let days = date.getDate()
-        days += tour?.duration || 0
+        days += relevantTour?.duration || 0
         date.setDate(days)
         return date.toISOString().split("T")[0]
     }
@@ -76,15 +77,15 @@ const TourView = () => {
   return (
     <div className="row ">
         <div className="col col-12">
-            <h1>{tour?.name}</h1>
-            <h5>Destination: {tour?.destination}</h5>
+            <h1>{relevantTour?.name}</h1>
+            <h5>Destination: {relevantTour?.destination}</h5>
         </div>
         <div className="col col-lg-8 col-12">
             <div className='p-2'>
-                <img src={tour?.image} style={{width: '100%', height: '400px'}}/>
+                <img src={relevantTour?.image} style={{width: '100%', height: '400px'}}/>
             </div>
             <p>Tour duration: 
-                <span style={{fontWeight: 'bold'}}> {tour?.duration} {tour?.duration || 0 > 1 ? 'days' : 'day'}</span>
+                <span style={{fontWeight: 'bold'}}> {relevantTour?.duration} {relevantTour?.duration || 0 > 1 ? 'days' : 'day'}</span>
             </p>
             <p>Offered in: 
                 <span style={{fontWeight: 'bold'}}> {languages.reduce((res, curr) => res + curr + ' ', '')}</span>
@@ -94,7 +95,7 @@ const TourView = () => {
             
 
         {
-            tourItems.length === 0 
+            relevantTourItems.length === 0 
             ? (<div className="container my-3 py-3 d-flex justify-content-center" style={{background: 'rgb(197, 35, 14)', borderRadius: '15px'}}>
                 <h1 className='pt-2' style={{color: 'white', fontWeight: 'bold'}}>SOLD OUT.</h1>
             </div>)
@@ -142,7 +143,7 @@ const TourView = () => {
                             </div>
                         </div>
                             <div className="d-flex justify-content-center mt-3">
-                                <button onClick={() => navigate(`/tours/book/${tour?.id}/${tourItemId}/${pax}`)} className='btn btn-primary mx-3 ' style={{width: '100%'}}>Book now</button>
+                                <button onClick={() => navigate(`/tours/book/${relevantTour?.id}/${tourItemId}/${pax}`)} className='btn btn-primary mx-3 ' style={{width: '100%'}}>Book now</button>
                             </div>
                             <div className="d-flex justify-content-center mt-3">
                                 <button onClick={() => setCheckAvailability(!checkAvailability)} className='btn btn-outline-secondary mx-3 ' style={{width: '100%'}}>Reset</button>

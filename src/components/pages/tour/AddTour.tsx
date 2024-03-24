@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import TourForm from '../forms/TourForm'
-import TourItemForm from '../forms/TourItemForm'
-import TourItemRow from '../components/TourItemsRow'
-import { TourModel } from '../../models/TourModel'
-import { tourService } from '../../config/service-config'
+import TourForm from '../../forms/TourForm'
+import TourItemForm from '../../forms/TourItemForm'
+import TourItemRow from '../../components/tour/TourItemsRow'
+import { TourModel } from '../../../models/TourModel'
+import { tourService } from '../../../config/service-config'
 import { useParams } from 'react-router-dom'
-import { useTourStore } from '../../store/useTourStore'
+import { useTourStore } from '../../../store/useTourStore'
+import { useTourItemStore } from '../../../store/useTourItemStore'
 
 const AddTour = () => {
 
@@ -13,7 +14,7 @@ const AddTour = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const setTour = useTourStore((state) => state.setTour)
-  const setTourItems = useTourStore((state) => state.setTourItems)
+  const setTourItems = useTourItemStore((state) => state.setTourItems)
 
   useEffect(() => {
     (async () => {
