@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useTourStore } from '../../store/useTourStore'
+import { useTourStore } from '../../../store/useTourStore'
 
 const BookTour = () => {
 

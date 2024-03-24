@@ -1,30 +1,31 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { useTourStore } from '../../store/useTourStore';
-import { tourService } from '../../config/service-config';
-import { TourModel } from '../../models/TourModel';
-import TourView from '../components/TourView';
-import { TourItemModel } from '../../models/TourItemModel';
+import { tourService } from '../../../config/service-config';
+import { TourModel } from '../../../models/TourModel';
+import TourView from '../../components/booking/TourView';
+import { TourItemModel } from '../../../models/TourItemModel';
+import { useRelevantToursStore } from '../../../store/useRelevantToursStore';
+import { useRelevantTourItemsStore } from '../../../store/useRelevantTourItemsStore';
 
 const TourPage = () => {
 
     const { tourId } = useParams();
-    const setTour = useTourStore((state) => state.setTour)
-    const setTourItems = useTourStore((state) => state.setTourItems)
+    const setRelevantTour = useRelevantToursStore((state) => state.setRelevantTour)
+    const serRelevantTourItems = useRelevantTourItemsStore((state) => state.setRelevantTourItems)
 
     const [isLoading, setIsLoading] = useState(false)
   
     useEffect(() => {
-      (async () => {
-        setIsLoading(true)
-        const currentTour = tourId && (await tourService.get(tourId)).data() as TourModel;
-        if (currentTour) {
-          setTour(currentTour)
-          const actualItems = getCurrentTourItems(currentTour.tourItems)
-          setTourItems(actualItems)
-        }
-        setIsLoading(false)
-      })();
+        (async () => {
+          setIsLoading(true)
+          const currentTour = tourId && (await tourService.get(tourId)).data() as TourModel;
+          if (currentTour) {
+            setRelevantTour(currentTour)
+            const actualItems = getCurrentTourItems(currentTour.tourItems)
+            serRelevantTourItems(actualItems)
+          }
+          setIsLoading(false)
+        })();
     }, [tourId]);
 
     const getCurrentTourItems = (items: TourItemModel[]) => {

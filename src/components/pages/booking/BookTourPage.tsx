@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useTourStore } from '../../store/useTourStore';
-import { tourService } from '../../config/service-config';
-import { TourModel } from '../../models/TourModel';
-import BookTourComp from '../components/BookTourComp';
+import { useTourStore } from '../../../store/useTourStore';
+import { tourService } from '../../../config/service-config';
+import { TourModel } from '../../../models/TourModel';
+import BookTourComp from '../../components/booking/BookTourComp';
+import { useRelevantTourItemsStore } from '../../../store/useRelevantTourItemsStore';
 
 const BookTourPage = () => {
 
   const { tourId } = useParams();
   const { tourItemId } = useParams();
-  const setTour = useTourStore((state) => state.setTour)
-  const setTourItem = useTourStore((state) => state.setTourItem)
+  const setRelevantTour = useTourStore((state) => state.setTour)
+  const setRelevantTourItem = useRelevantTourItemsStore((state) => state.setRelevantTourItem)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -19,10 +20,10 @@ const BookTourPage = () => {
       setIsLoading(true)
       const currentTour = tourId && (await tourService.get(tourId)).data() as TourModel;
       if (currentTour) {
-        setTour(currentTour)
+        setRelevantTour(currentTour)
         const currTourItem = currentTour.tourItems.find((e: any) => e.id == tourItemId)
-        
-        currTourItem && setTourItem(currTourItem)
+
+        currTourItem && setRelevantTourItem(currTourItem)
       }
       setIsLoading(false)
     })();

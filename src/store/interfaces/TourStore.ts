@@ -1,4 +1,3 @@
-import { TourItemModel } from "../../models/TourItemModel";
 import { TourModel } from "../../models/TourModel";
 
 export default interface TourStore {
@@ -9,11 +8,4 @@ export default interface TourStore {
     addTour: (tour: TourModel) => void,
     updateTour: (tour: TourModel) => void,
     deleteTour: (id: string) => void,
-    tourItem: TourItemModel | null,
-    setTourItem: (tourItem: TourItemModel | null) => void,
-    tourItems: TourItemModel[],
-    setTourItems: (tourItems: TourItemModel[]) => void
-    addTourItem: (tourItem: TourItemModel) => void,
-    updateTourItems: (tourItem: TourItemModel) => void,
-    deleteTourItem: (id: string) => void,
 }

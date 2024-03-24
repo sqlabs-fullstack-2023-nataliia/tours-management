@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useTourStore } from '../../store/useTourStore';
-import { useTourSettingsStore } from '../../store/interfaces/useTourSettingsStore';
+import { useTourSettingsStore } from '../../store/useTourSettingsStore';
 import { TourItemModel } from '../../models/TourItemModel';
 import { tourService } from '../../config/service-config';
+import { useTourItemStore } from '../../store/useTourItemStore';
 
 const DEFAULT_VALUE = 'Select option'
 
@@ -10,13 +11,14 @@ const AddTourItem = () => {
 
   const tourSettings = useTourSettingsStore((state) => state.settings)
   const tour = useTourStore((state) => state.tour)
-  const tourItem = useTourStore((state) => state.tourItem)
   const updateTour = useTourStore((state) => state.updateTour)
-  const tourItems = useTourStore((state) => state.tourItems)
 
-  const addTourItem = useTourStore((state) => state.addTourItem)
-  const updateTourItem = useTourStore((state) => state.updateTourItems)
-  const setTourItem = useTourStore((state) => state.setTourItem)
+  const tourItem = useTourItemStore((state) => state.tourItem)
+  const tourItems = useTourItemStore((state) => state.tourItems)
+
+  const addTourItem = useTourItemStore((state) => state.addTourItem)
+  const updateTourItem = useTourItemStore((state) => state.updateTourItems)
+  const setTourItem = useTourItemStore((state) => state.setTourItem)
 
 
   const initialTourItem: TourItemModel = tourItem || {

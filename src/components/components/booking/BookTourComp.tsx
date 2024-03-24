@@ -1,20 +1,21 @@
 import { useState } from 'react'
-import { useTourStore } from '../../store/useTourStore'
 import { useNavigate, useParams } from 'react-router-dom'
-import CustomerForm from '../forms/CustomerForm'
-import { CustomerModel } from '../../models/CustomerModel'
+import CustomerForm from '../../forms/CustomerForm'
+import { CustomerModel } from '../../../models/CustomerModel'
 import BookingConfirmationComp from './BookingConfirmationComp'
-import ConfirmationForm from '../forms/ConfirmationForm'
-import { BookingModel } from '../../models/BookingModel'
-import { tourService } from '../../config/service-config'
-import { TourModel } from '../../models/TourModel'
+import ConfirmationForm from '../../forms/ConfirmationForm'
+import { BookingModel } from '../../../models/BookingModel'
+import { tourService } from '../../../config/service-config'
+import { TourModel } from '../../../models/TourModel'
+import { useRelevantToursStore } from '../../../store/useRelevantToursStore'
+import { useRelevantTourItemsStore } from '../../../store/useRelevantTourItemsStore'
 
 const BOOKING_CONFIRMATION_MESSAGE = 'Your order was successfully placed. Your booking confirmation number is: '
 
 const BookTourComp = () => {
 
-    const tour = useTourStore((state) => state.tour)
-    const tourItem = useTourStore((state) => state.tourItem)
+    const relevantTour = useRelevantToursStore((state) => state.relevantTour)
+    const relevantTourItem = useRelevantTourItemsStore((state) => state.relevantTourItem)
     const navigate = useNavigate()
     const { pax } = useParams();
     const [paxCount, setPaxCount] = useState(1)
@@ -25,10 +26,10 @@ const BookTourComp = () => {
 
     // TODO make another file for js functions
     const getReturningDate = () => {
-        if (tourItem?.departureDate) {
-            let date = new Date(tourItem.departureDate)
+        if (relevantTourItem?.departureDate) {
+            let date = new Date(relevantTourItem.departureDate)
             let days = date.getDate()
-            days += tour?.duration || 0
+            days += relevantTour?.duration || 0
             date.setDate(days)
             return date.toISOString().split("T")[0]
         }
@@ -43,19 +44,19 @@ const BookTourComp = () => {
         setModalOpen(true)
         setBookingId(booking.id)
         setMessage(BOOKING_CONFIRMATION_MESSAGE + booking.id)
-        if(tourItem && pax && tour){
-            const newAvailability = tourItem?.availability - +pax;
-            const tourItemCopy = { ...tourItem }
+        if(relevantTourItem && pax && relevantTour){
+            const newAvailability = relevantTourItem?.availability - +pax;
+            const tourItemCopy = { ...relevantTourItem }
             tourItemCopy.availability = newAvailability
-            const currTour = (await tourService.get(tour?.id)).data() as TourModel 
+            const currTour = (await tourService.get(relevantTour?.id)).data() as TourModel 
             const updatedTourItems = currTour.tourItems.map((e: any) => {
-                if(e.id === tourItem.id){
+                if(e.id === relevantTourItem.id){
                     e.availability = newAvailability
                 }
                 return e;
             })
             
-            await tourService.update({ ...tour, tourItems: updatedTourItems })
+            await tourService.update({ ...relevantTour, tourItems: updatedTourItems })
         }
     }
 
@@ -80,13 +81,13 @@ const BookTourComp = () => {
                             <h6>Language:</h6>
                         </div>
                         <div className="col-7 my-2">
-                            <h5>{tourItem?.language}</h5>
+                            <h5>{relevantTourItem?.language}</h5>
                         </div>
                         <div className="col-5 my-2">
                             <h6>Departure:</h6>
                         </div>
                         <div className="col-7 my-2">
-                            <h5>{tourItem?.departureDate}</h5>
+                            <h5>{relevantTourItem?.departureDate}</h5>
                         </div>
                         <div className="col-5 my-2">
                             <h6>Returning: </h6>
@@ -104,13 +105,13 @@ const BookTourComp = () => {
                             <h6>Price: </h6>
                         </div>
                         <div className="col-7 my-2">
-                            <h5>{tourItem?.price} $</h5>
+                            <h5>{relevantTourItem?.price} $</h5>
                         </div>
                         <div className="col-5 my-2">
                             <h6>Total: </h6>
                         </div>
                         <div className="col-7 my-2">
-                            <h5>{(tourItem?.price || 1) * (pax ? +pax : 1)} $</h5>
+                            <h5>{(relevantTourItem?.price || 1) * (pax ? +pax : 1)} $</h5>
                         </div>
                     </div>
                     {

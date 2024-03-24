@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { auth, database, googleProvider } from '../../services/firebaseConfig';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import { useUserStore } from '../../store/useUserStore';
-import { UserModel } from '../../models/UserModel';
+import { addDoc, collection } from 'firebase/firestore';
+
 
 const Login = () => {
 
@@ -17,31 +16,6 @@ const Login = () => {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  //const setCurrentUser = useUserStore((state) => state.setUser)
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //     console.log("on auth state changed");
-  //     if (user) {
-  //       const accountRef = collection(database, "accounts");
-  //       const q = query(accountRef, where("uid", "==", auth.currentUser?.uid));
-  //       const qSnapShot = await getDocs(q);
-  //       if (!qSnapShot.empty) {
-  //         const currentUser = qSnapShot.docs.map((doc) => ({
-  //           id: doc.id,
-  //           ...doc.data()
-  //         }))[0] as UserModel;
-  //         setCurrentUser(currentUser);
-  //       }
-  //     }
-  //   });
-
-  //   return () => {
-  //     // Cleanup: Unsubscribe the listener when the component unmounts
-  //     unsubscribe();
-  //   };
-  // }, []);
 
   const handleLogin = async () => {
     // TODO validation

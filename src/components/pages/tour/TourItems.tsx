@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import TourItemRow from '../components/TourItemRow';
-import { useTourStore } from '../../store/useTourStore';
-import { TourItemView } from '../../models/TourItemView';
+import TourItemRow from '../../components/tour/TourItemRow';
+import { useTourStore } from '../../../store/useTourStore';
+import { TourItemView } from '../../../models/TourItemView';
 
 const STRING_TYPE = 'string'
 const NUMBER_TYPE = 'number'

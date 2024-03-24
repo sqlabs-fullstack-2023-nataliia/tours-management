@@ -1,6 +1,6 @@
 import { TbPencil } from "react-icons/tb";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { useTourStore } from "../../store/useTourStore";
+import { useTourItemStore } from "../../../store/useTourItemStore";
 
 // TODO take status from firebase + mb add color picker to settings
 const statusColor: { [key: string]: string } = {
@@ -17,9 +17,9 @@ interface Props {
 
 const TourItemRow = ({viewMode}: Props) => {
 
-  const tourItems = useTourStore((state) => state.tourItems)
-  const setTourItem = useTourStore((state) => state.setTourItem)
-  const removeTourItem = useTourStore((state) => state.deleteTourItem)
+  const tourItems = useTourItemStore((state) => state.tourItems)
+  const setTourItem = useTourItemStore((state) => state.setTourItem)
+  const removeTourItem = useTourItemStore((state) => state.deleteTourItem)
 
   return (
     <div className="container" >
