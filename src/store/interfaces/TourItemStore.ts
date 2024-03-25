@@ -1,6 +1,6 @@
 import { TourItemModel } from "../../models/TourItemModel";
 
-export default interface TourStore {
+export default interface TourItemStore {
     tourItem: TourItemModel | null,
     setTourItem: (tourItem: TourItemModel | null) => void,
     tourItems: TourItemModel[],

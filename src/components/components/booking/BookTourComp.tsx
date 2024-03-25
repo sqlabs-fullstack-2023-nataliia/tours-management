@@ -9,6 +9,7 @@ import { tourService } from '../../../config/service-config'
 import { TourModel } from '../../../models/TourModel'
 import { useRelevantToursStore } from '../../../store/useRelevantToursStore'
 import { useRelevantTourItemsStore } from '../../../store/useRelevantTourItemsStore'
+import TourDetailsComp from '../TourDetailsComp'
 
 const BOOKING_CONFIRMATION_MESSAGE = 'Your order was successfully placed. Your booking confirmation number is: '
 
@@ -76,7 +77,14 @@ const BookTourComp = () => {
                 </div>
                 <div className={`col col-lg-4 col-12 ${pax && paxCount <= +pax ? 'd-flex' : ''}`} >
 
-                    <div className="row p-2 mx-1" style={{ background: 'rgb(237, 244, 252)', borderRadius: '15px' }}>
+                {/* <TourDetailsComp 
+                    duration={relevantTour?.duration || 1} 
+                    departure={relevantTourItem?.departureDate || ''} 
+                    language={relevantTourItem?.language || ''} 
+                    price={relevantTourItem?.price || 0} 
+                    pax={!!pax ? +pax : 1}/> */}
+
+                     <div className="row p-2 mx-1" style={{ background: 'rgb(237, 244, 252)', borderRadius: '15px' }}>
                         <div className="col-5 my-2">
                             <h6>Language:</h6>
                         </div>
@@ -113,7 +121,10 @@ const BookTourComp = () => {
                         <div className="col-7 my-2">
                             <h5>{(relevantTourItem?.price || 1) * (pax ? +pax : 1)} $</h5>
                         </div>
-                    </div>
+                    </div> 
+
+
+                    
                     {
                         !(pax && paxCount <= +pax) && !bookingId && <ConfirmationForm customers={customers} confirmationFn={confirmationFn}/>
                     }
