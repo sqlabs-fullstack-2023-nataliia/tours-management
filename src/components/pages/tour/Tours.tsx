@@ -13,9 +13,11 @@ const Tours = () => {
         <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Destination</div>
         <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Duration</div>
         <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Commission</div>
-        <div className="col col-3"></div>
+        <div className="col col-1 d-none d-lg-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Details</div>
+        <div className="col col-1 d-none d-lg-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Edit</div>
+        <div className="col col-1 d-none d-lg-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Remove</div>
       </div>
-      <div className='p-2' style={{background: 'white'}}>
+      <div className='p-2' style={{background: 'white', borderRadius: '15px'}}>
       {
           tours.length === 0 
           ? (<div className='container d-flex justify-content-center'><h2>No Tours Found</h2></div>) 
