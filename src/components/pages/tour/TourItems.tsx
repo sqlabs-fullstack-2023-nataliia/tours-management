@@ -88,22 +88,21 @@ const handleSort = (filter: string, type: string, order: string) => {
     <div className="container-fluid">
       <div className="container-fluid mb-4 py-2" style={{background: 'white', borderRadius: '15px'}}>
       <div className="row mx-2 px-1">
-          <div className="col col-lg-9">
+          <div className="col col-lg-9 col-md-6 col-12">
             <h2 style={{color: 'rgb(44, 48, 53)'}}>TOURS</h2>
           </div>
-          <div className="col col-lg-1">
+          <div className="col col-lg-1 col-md-2 col-12">
           <label className="form-label" style={{ fontWeight: 'bold' }}>Tour ID</label>
-            {/* <button onClick={handleSearchById} className='btn btn-success' style={{width: '100%'}}>Search</button> */}
           </div>
-          <div className="col col-lg-2">
+          <div className="col col-lg-2 col-md-4 col-12">
             <input onChange={(e) => setId(e.target.value)} type="text" className="form-control" value={id} />
           </div>
         </div>
         <div className="row m-2 p-1">
-          <div className="col col-lg-1">
+          <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
             <label className="form-label" style={{ fontWeight: 'bold' }}>From</label>
           </div>
-          <div className="col col-lg-2">
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
             <input
               onKeyDown={(e) => { e.preventDefault() }}
               onChange={(e) => setDate(e.target.value)}
@@ -113,22 +112,22 @@ const handleSort = (filter: string, type: string, order: string) => {
               className="form-control"
               value={date} />
           </div>
-          <div className="col col-lg-1">
+          <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
             <label className="form-label" style={{ fontWeight: 'bold' }}>Days</label>
           </div>
-          <div className="col col-lg-2">
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
             <input onChange={(e) => setDays(e.target.value)} type="text" className="form-control" value={days} />
           </div>
-          <div className="col col-lg-1">
+          <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
             <label className="form-label" style={{ fontWeight: 'bold' }}>Name</label>
           </div>
-          <div className="col col-lg-2">
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
             <input onChange={(e) => setName(e.target.value)} type="text" className="form-control" value={name} />
           </div>
-          <div className="col col-lg-1">
+          <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
             <label className="form-label" style={{ fontWeight: 'bold' }}>Status</label>
           </div>
-          <div className="col col-lg-2">
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
             <select onChange={(e) => setStatus(e.target.value)} className="form-select" value={status}>
               <option value={status} >{status}</option>
               {
@@ -138,10 +137,10 @@ const handleSort = (filter: string, type: string, order: string) => {
           </div>
         </div>
         <div className="row m-2 p-1" >
-          <div className="col col-lg-1">
+          <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
             <label className="form-label" style={{ fontWeight: 'bold' }}>Language</label>
           </div>
-          <div className="col col-lg-2">
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
             <select onChange={(e) => setLanguage(e.target.value)} className="form-select" value={language}>
               <option value={language} >{language}</option>
               {
@@ -149,16 +148,16 @@ const handleSort = (filter: string, type: string, order: string) => {
               }
             </select>
           </div>
-          <div className="col col-lg-1">
+          <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
             <label className="form-label" style={{ fontWeight: 'bold' }}>Duration</label>
           </div>
-          <div className="col col-lg-2">
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
             <input onChange={(e) => setDuration(e.target.value)} type="text" className="form-control" value={duration} />
           </div>
-          <div className="col col-lg-1">
+          <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
             <label className="form-label" style={{ fontWeight: 'bold' }}>Destination</label>
           </div>
-          <div className="col col-lg-2">
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
             <input onChange={(e) => setDestination(e.target.value)} type="text" className="form-control" value={destination} />
           </div>
           <div className="col col-lg-3">
@@ -174,51 +173,51 @@ const handleSort = (filter: string, type: string, order: string) => {
         </div>
       </div>
       <div className="row mb-2 px-2 mx-1">
-        <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+        <div className="col col-2 d-none d-xl-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           ID
           <br/>
           <button onClick={() => handleSort('id', NUMBER_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('id', NUMBER_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
-        <div className="col col-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+        <div className="col col-xl-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           Name
           <br/>
           <button onClick={() => handleSort('name', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('name', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
-        <div className="col col-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Image</div>
-        <div className="col col-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+        <div className="col col-1 d-none d-xl-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Image</div>
+        <div className="col col-1 d-none d-xl-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           Language
           <br/>
           <button onClick={() => handleSort('language', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('language', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
-        <div className="col col-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+        <div className="col col-1 d-none d-lg-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           Duration
           <br/>
           <button onClick={() => handleSort('duration', NUMBER_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('duration', NUMBER_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
-        <div className="col col-1 " style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+        <div className="col col-xl-1 " style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           Destination
           <br/>
           <button onClick={() => handleSort('destination', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('destination', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
-        <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+        <div className="col col-2 d-none d-md-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           Departure
           <br/>
           <button onClick={() => handleSort('departureDate', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('departureDate', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
 
-        <div className="col col-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+        <div className="col col-xl-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           Status
           <br/>
           <button onClick={() => handleSort('status', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('status', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
-        <div className="col col-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Availability</div>
+        <div className="col col-xl-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Availability</div>
       </div>
       <div className='p-4' style={{background: 'white', borderRadius: '15px'}}>
       {
