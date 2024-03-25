@@ -6,7 +6,7 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import { useTourStore } from '../../../store/useTourStore';
 import { tourService } from '../../../config/service-config';
-import TourItemRow from './TourItemsRow';
+import TourItemsRow from './TourItemsRow';
 import { useTourItemStore } from '../../../store/useTourItemStore';
 
 
@@ -30,7 +30,7 @@ const TourRow = ({tour, index}: Props) => {
   }
 
   return (
-    <div className="row" >
+    <div className="row">
       {
         isLoading 
         ? (<div className='container d-flex justify-content-center'>
@@ -54,11 +54,11 @@ const TourRow = ({tour, index}: Props) => {
               <button className='btn' onClick={() => removeTour(tour.id)}><FaRegTrashAlt/></button>
             </div>
             <div className="accordion" id="accordionExample" >
-              <div className="accordion-item" style={{background: 'rgb(242, 245, 247)'}}>
+              <div className="accordion-item" style={{background: 'rgb(242, 245, 247)', borderRadius: '15px'}}>
                 <div id={tour.id} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                   <div className="accordion-body" >
                   {
-                   <TourItemRow viewMode={true}/>
+                   <TourItemsRow viewMode={true}/>
                   }
                   </div>
                 </div>

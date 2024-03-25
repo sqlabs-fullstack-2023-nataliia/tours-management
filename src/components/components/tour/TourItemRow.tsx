@@ -21,17 +21,17 @@ const TourItemRow = ({tourItemsView}: Props) => {
       {
         tourItemsView.map((item, index) => {
           return <div className="row p-2" key={item.id} style={{ background: statusColor[item.status] }}>
-          <div className="col col-2" style={{color: 'rgb(44, 48, 53)'}}>{item.id}</div>
-          <div className="col col-1" style={{color: 'rgb(44, 48, 53)'}}>{item.name}</div>
-          <div className="col col-1" style={{color: 'rgb(44, 48, 53)'}}>
+          <div className="col col-2 d-none d-xl-block" style={{color: 'rgb(44, 48, 53)'}}>{item.id}</div>
+          <div className="col col-xl-1" style={{color: 'rgb(44, 48, 53)'}}>{item.name}</div>
+          <div className="col col-1 d-none d-xl-block" style={{color: 'rgb(44, 48, 53)'}}>
               <img src={item.image} rel='image' style={{ width: '100%', height: '50px' }}/>
           </div>
-          <div className="col col-1" style={{color: 'rgb(44, 48, 53)'}}>{item.language}</div>
-          <div className="col col-1" style={{color: 'rgb(44, 48, 53)'}}>{item.duration}</div>
-          <div className="col col-1" style={{color: 'rgb(44, 48, 53)'}}>{item.destination}</div>
-          <div className="col col-2" style={{color: 'rgb(44, 48, 53)'}}>{item.departureDate}</div>
-          <div className="col col-1" style={{color: 'rgb(44, 48, 53)'}}>{item.status}</div>
-          <div className="col col-2 ps-5" style={{color: 'rgb(44, 48, 53)'}}>{item.availability}/{item.totalAvailability}</div>
+          <div className="col col-1 d-none d-xl-block" style={{color: 'rgb(44, 48, 53)'}}>{item.language}</div>
+          <div className="col col-1 d-none d-lg-block" style={{color: 'rgb(44, 48, 53)'}}>{item.duration}</div>
+          <div className="col col-xl-1" style={{color: 'rgb(44, 48, 53)'}}>{item.destination}</div>
+          <div className="col col-2 d-none d-md-block" style={{color: 'rgb(44, 48, 53)'}}>{item.departureDate}</div>
+          <div className="col col-xl-1" style={{color: 'rgb(44, 48, 53)'}}>{item.status}</div>
+          <div className="col col-xl-2 ps-5" style={{color: 'rgb(44, 48, 53)'}}>{item.availability}/{item.totalAvailability}</div>
 
         </div>
         })
