@@ -5,8 +5,8 @@ import { UserModel } from "./UserModel";
 
 export interface BookingItemModel {
     id: string,
-    tour: TourModel,
-    tourItemId: TourItemModel,
-    uid: UserModel,
+    tour: TourModel | null,
+    tourItem: TourItemModel | null,
+    user: UserModel | null,
     customers: CustomerModel[]
 }

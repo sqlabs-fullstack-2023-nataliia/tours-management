@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { tourBookingService } from '../../config/service-config'
 import InfoModal from '../modals/InfoModal'
 import { BookingModel } from '../../models/BookingModel'
+import { useRelevantToursStore } from '../../store/useRelevantToursStore'
+import { useRelevantTourItemsStore } from '../../store/useRelevantTourItemsStore'
 
 interface Props {
     customers: CustomerModel[],
@@ -30,16 +32,46 @@ const ConfirmationForm = ({customers, confirmationFn}: Props) => {
 
     const navigate = useNavigate()
     const { tourId } = useParams()
-    const { tourItemId } = useParams()
+    // const { tourItemId } = useParams()
+    const relevantTour = useRelevantToursStore((state) => state.relevantTour)
+    const relevantTourItem = useRelevantTourItemsStore((state) => state.relevantTourItem)
     const user = useUserStore((state) => state.user)
     const [isLoading, setIsLoading] = useState(false)
     const [message, setMessage] = useState<string[]>([])
+    
+    // const [booking, setBooking] = useState({
+    //     id: '',
+    //     tourId: tourId,
+    //     tourItemId: tourItemId,
+    //     uid: user?.id,
+    //     customers: customers
+    // })
     const [booking, setBooking] = useState({
         id: '',
-        tourId: tourId,
-        tourItemId: tourItemId,
-        uid: user?.id,
-        customers: customers
+        tour: {
+            id: relevantTour?.id,
+            name: relevantTour?.name,
+            destination: relevantTour?.destination,
+            duration: relevantTour?.duration,
+            image: relevantTour?.image,
+            commission: relevantTour?.commission,
+        },
+        tourItem: {
+            id: relevantTourItem?.id,
+            departureDate: relevantTourItem?.departureDate,
+            language: relevantTourItem?.language,
+            price: relevantTourItem?.price,
+        },
+        user: {
+            id: user?.uid,
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+            role: user?.role,
+            tourAgency: user?.tourAgency
+        },
+        customers: customers,
+        takingDate: new Date().toISOString().split("T")[0],
+        paymentStatus: 'pending'
     })
     const [tAgency, setTAgency] = useState('');
     const [agencyOptions, setAgencyOptions] = useState<string[]>([])

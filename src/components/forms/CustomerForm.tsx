@@ -5,6 +5,7 @@ import InfoModal from '../modals/InfoModal'
 
 
 const initialCustomer = {
+    id: Date.now().toLocaleString(),
     firstName: '',
     lastName: '',
     email: '',
@@ -28,7 +29,9 @@ const WRONG_INPUT = 'Wrong input!'
 
 interface Props {
     submitCustomer: (customer: CustomerModel) => void
-    count: number
+    count: number,
+    // customerUpdate?: CustomerModel
+
 }
 
 const CustomerForm = ({ submitCustomer, count }: Props) => {
@@ -99,6 +102,7 @@ const CustomerForm = ({ submitCustomer, count }: Props) => {
     const addCustomer = () => {
         setMessages([WRONG_INPUT])
         setIsInputValid(false)
+        //!!submitCustomer && 
         submitCustomer(customer)
         setCustomer(initialCustomer)
     }
