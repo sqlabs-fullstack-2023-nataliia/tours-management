@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CustomerModel } from '../../models/CustomerModel'
 import { useParams } from 'react-router-dom'
 import InfoModal from '../modals/InfoModal'
 
 
 const initialCustomer = {
-    id: Date.now().toLocaleString(),
+    id: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -23,24 +23,25 @@ const LAST_NAME_NOT_VALID = 'last name field is required'
 const PASSPORT_NOT_VALID = 'passport number field is required'
 const NATIONALITY_NOT_VALID = 'nationality field is required'
 const CUSTOMER_ADDED_MESSAGE = 'Customer was successfuly added'
+const CUSTOMER_UPDATED_MESSAGE = 'Customer was successfuly updated'
 const WRONG_INPUT = 'Wrong input!'
 
 
 
 interface Props {
-    submitCustomer: (customer: CustomerModel) => void
-    count: number,
-    // customerUpdate?: CustomerModel
-
+    submitCustomer: (customer: CustomerModel | null) => void
+    count?: number,
+    customerUpdate?: CustomerModel | null
 }
 
-const CustomerForm = ({ submitCustomer, count }: Props) => {
+const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
 
     const { pax } = useParams();
 
-    const [customer, setCustomer] = useState(initialCustomer)
+    const [customer, setCustomer] = useState(customerUpdate || initialCustomer)
     const [messages, setMessages] = useState([WRONG_INPUT])
     const [isInputValid, setIsInputValid] = useState(false)
+
 
     const firstNameHandler = (event: any) => {
         const value = event.target.value
@@ -94,15 +95,32 @@ const CustomerForm = ({ submitCustomer, count }: Props) => {
 
     const submitFn = () => {
         if (validateInput()) {
+            if(!!!customerUpdate){
+                const customerCopy = { ...customer };
+                customerCopy.id = Date.now().toLocaleString(),
+                setCustomer(customerCopy)
+            }
             setIsInputValid(true)
-            setMessages([CUSTOMER_ADDED_MESSAGE])
+            setMessages(!!customerUpdate ? [CUSTOMER_UPDATED_MESSAGE]:  [CUSTOMER_ADDED_MESSAGE])
         } 
+    }
+
+    const resetEdit = () => {
+        setCustomer(customerUpdate || initialCustomer)
+        setMessages([WRONG_INPUT])
+        setIsInputValid(false)
+    }
+
+    const cancelEdit = () => {
+        setMessages([WRONG_INPUT])
+        setIsInputValid(false)
+        submitCustomer(null)
+        setCustomer(initialCustomer)
     }
 
     const addCustomer = () => {
         setMessages([WRONG_INPUT])
         setIsInputValid(false)
-        //!!submitCustomer && 
         submitCustomer(customer)
         setCustomer(initialCustomer)
     }
@@ -148,7 +166,7 @@ const CustomerForm = ({ submitCustomer, count }: Props) => {
         <div className="container">
 
             <div className="row">
-                <h2>Plese fill details for {`${count}/${pax}`} peron</h2>
+                <h2>Plese fill details for {count && `${count}/${pax}`} peron</h2>
                 <div className="col col-lg-4 col-12 my-1">
                     <label className="form-label" style={{ fontWeight: 'bold' }}>First name</label>
                 </div>
@@ -192,8 +210,19 @@ const CustomerForm = ({ submitCustomer, count }: Props) => {
                         className="form-control"
                         value={customer.dateOfBirth} />
                 </div>
-                <div className="col col-lg-8 col-12 my-1">
-                </div>
+                {
+                    customerUpdate === null || !!customerUpdate
+                    ? (
+                        <>
+                        <div className="col col-lg-4 col-12 my-1 mt-3">
+                            <button onClick={resetEdit} className='btn btn-outline-secondary' style={{ width: '100%' }}>Reset</button>
+                        </div>
+                        <div className="col col-lg-4 col-12 my-1 mt-3">
+                            <button onClick={cancelEdit} className='btn btn-outline-danger' style={{ width: '100%' }}>Cancel</button>
+                        </div></>
+                    ) 
+                    : (  <div className="col col-lg-8 col-12 my-1 mt-3"></div>)
+                }
                 <div className="col col-lg-4 col-12 my-1 mt-3">
                     <button onClick={submitFn} className='btn btn-outline-primary' style={{ width: '100%' }} data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
                 </div>

@@ -90,9 +90,7 @@ const handleSort = (filter: string, type: string, order: string) => {
 }
 
 const calculateCommission = (items: TourItemView[]) => {
-  console.log('*** length ' + items.length)
   const result = items.reduce((res, curr) => res += (((curr.totalAvailability - curr.availability) * curr.price) * curr.commission) / 100  , 0)
-  console.log(result)
   setTotalCommition(result + '')
 }
 
@@ -240,7 +238,7 @@ const calculateCommission = (items: TourItemView[]) => {
           <button onClick={() => handleSort('status', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('status', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
-        <div className="col col-xl-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Availability</div>
+        <div className="col " style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Availability</div>
       </div>
       <div className='p-4' style={{background: 'white', borderRadius: '15px'}}>
       {
