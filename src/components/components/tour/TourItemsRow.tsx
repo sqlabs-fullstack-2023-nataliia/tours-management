@@ -38,7 +38,6 @@ const TourItemRow = ({viewMode, tourItemsView}: Props) => {
               <div className={`col col-lg-2`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Status</div>
               <div className={`col col-lg-2`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Availability</div>
               <div className={`col d-none d-${!!viewMode ? 'md' : 'xl'}-block`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Price</div>
-              {/* <div className={`col col-lg-2`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Status</div> */}
               {!!!viewMode && <div className="col col-lg-2"></div>}
               
             </div>
@@ -46,13 +45,12 @@ const TourItemRow = ({viewMode, tourItemsView}: Props) => {
               {
                 curTourItems.map((tourItem, index) => {
                   return <div className="row" key={index} style={{ background: statusColor[tourItem.status] }}>
-                    <div className="col col-lg-2 pt-2">{index + 1}</div>
+                    <div className="col col-lg-2 pt-2">{tourItem.id}</div>
                     <div className={`col col-2 pt-2 d-none d-${!!viewMode ? 'lg' : 'lg'}-block`}>{tourItem.departureDate}</div>
                     <div className={`col pt-2 col-xl-${!!viewMode ? '2' : '1'} col-2`}>{tourItem.language}</div>
                     <div className={`col col-lg-2 pt-2`}>{tourItem.status}</div>
                     <div className={`col col-lg-2 pt-2`}>{tourItem.availability}</div>
                     <div className={`col pt-2 d-none d-${!!viewMode ? 'md' : 'xl'}-block`}>{tourItem.price}</div>
-                    {/* <div className={`col col-lg-2 pt-2`}>{tourItem.status}</div> */}
                     {
                       !!!viewMode && <>
                       <div className="col col-1 p-2">

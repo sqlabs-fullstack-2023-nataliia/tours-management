@@ -9,35 +9,89 @@ const STRING_TYPE = 'string'
 const NUMBER_TYPE = 'number'
 const DESCENDING_ORDER  = 'descending'
 const ASCENDING_ORDER = 'ascending'
-const MIN_DATE_VALUE = '2023-12-31'
-const MAX_DATE_VALUE = new Date(`${new Date().getFullYear() + 2}-12-31`).toISOString().split("T")[0]
 
 const Tours = () => {
 
+  const tours = useTourStore((state) => state.tours)
+  const [initialTours, setInitialTours] = useState<TourModel[]>([...tours])
+
   const [id, setId] = useState('');
-  const [date, setDate] = useState('')
-  const [days, setDays] = useState('')
   const [name, setName] = useState('')
-  const [status, setStatus] = useState('')
-  const [language, setLanguage] = useState('')
   const [duration, setDuration] = useState('')
   const [destination, setDestination] = useState('')
 
-  const tours = useTourStore((state) => state.tours)
-  const [curTours, setCurTours] = useState<TourModel[]>([...tours])
+  const handleFilters = () => {
+
+    let curTourItems: TourModel[] = [...tours]
+    if(name) curTourItems = curTourItems.filter(e => e.name.toLocaleLowerCase().includes(name.trim().toLocaleLowerCase()))
+    if(duration) curTourItems = curTourItems.filter(e => e.duration === +duration)
+    if(destination) curTourItems = curTourItems.filter(e => e.destination === destination)
+    setInitialTours([...curTourItems])
+  }
+  
+  const handleResetFilters = () => {
+    setId('')
+    setName('')
+    setDuration('')
+    setDestination('')
+    setInitialTours([...tours])
+  }
 
   const handleSort = (filter: string, type: string, order: string) => {
     const sortedTours = type === 'string' 
       ? [...tours].sort((a: any, b: any) => order === ASCENDING_ORDER ? a[filter].localeCompare(b[filter]) : b[filter].localeCompare(a[filter])) 
       : [...tours].sort((a: any, b: any) => order === ASCENDING_ORDER ? +a[filter] - +b[filter] : +b[filter] - +a[filter]);
       
-    setCurTours(sortedTours)
+    setInitialTours(sortedTours)
   }
 
-  console.log(curTours)
+  console.log(initialTours)
 
   return (
     <div className="container-fluid">
+      <div className="container-fluid my-4 py-2" style={{background: 'white', borderRadius: '15px'}}>
+      <div className="row mx-2 px-1">
+          <div className="col col-lg-9 col-md-6 col-12">
+            <h2 style={{color: 'rgb(44, 48, 53)'}}>TOURS</h2>
+          </div>
+          <div className="col col-lg-1 col-md-2 col-12">
+          <label className="form-label" style={{ fontWeight: 'bold' }}>Tour ID</label>
+          </div>
+          <div className="col col-lg-2 col-md-4 col-12">
+            <input onChange={(e) => setId(e.target.value)} type="text" className="form-control" value={id} />
+          </div>
+        </div>
+        <div className="row m-2 p-1" >
+        <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
+            <label className="form-label" style={{ fontWeight: 'bold' }}>Name</label>
+          </div>
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
+            <input onChange={(e) => setName(e.target.value)} type="text" className="form-control" value={name} />
+          </div>
+          <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
+            <label className="form-label" style={{ fontWeight: 'bold' }}>Duration</label>
+          </div>
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
+            <input onChange={(e) => setDuration(e.target.value)} type="text" className="form-control" value={duration} />
+          </div>
+          <div className="col col-lg-1 col-md-2 col-12 mb-2 mb-lg-0">
+            <label className="form-label" style={{ fontWeight: 'bold' }}>Destination</label>
+          </div>
+          <div className="col col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
+            <input onChange={(e) => setDestination(e.target.value)} type="text" className="form-control" value={destination} />
+          </div>
+          <div className="col col-lg-3">
+            <div className="row">
+              <div className="col col-lg-6">
+                <button onClick={handleFilters} className='btn btn-primary p-1 mx-2' style={{width: '100%'}}>Search</button>
+              </div>
+              <div className="col col-lg-6">
+                <button onClick={handleResetFilters} className='btn btn-outline-secondary p-1 mx-2' style={{width: '100%'}}>Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="row py-3 mb-2 px-2">
         <div className="col col-3 d-none d-lg-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           ID
@@ -76,10 +130,10 @@ const Tours = () => {
       </div>
       <div className='p-2' style={{background: 'white', borderRadius: '15px'}}>
       {
-          curTours.length === 0 
+          initialTours.length === 0 
           ? (<div className='container d-flex justify-content-center'><h2>No Tours Found</h2></div>) 
           : (
-            curTours.map((e, i) => {
+            initialTours.map((e, i) => {
               return <TourRow tour={e} index={i + 1} key={e.id}/>
             })
           )
