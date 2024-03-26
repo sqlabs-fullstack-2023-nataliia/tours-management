@@ -36,9 +36,11 @@ const BookTourComp = () => {
         }
     }
 
-    const submitCustomer = (customer: CustomerModel) => {
-        setPaxCount(paxCount + 1)
-        setCustomers((prevCustomers) => [...prevCustomers, customer]);
+    const submitCustomer = (customer: CustomerModel | null) => {
+        if(customer){
+            setPaxCount(paxCount + 1)
+            setCustomers((prevCustomers) => [...prevCustomers, customer]);
+        }
     }
 
     const confirmationFn = async(booking: BookingModel) => {

@@ -4,6 +4,7 @@ import { TbPencil } from "react-icons/tb";
 import { Link } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import BookingItemRow from './BookingItemRow';
+import { useBookingStore } from '../../../store/useBookingStore';
 
 // TODO to fix
 const statusColor: { [key: string]: string } = {
@@ -14,13 +15,14 @@ const statusColor: { [key: string]: string } = {
 
 }
 
-interface Props {
-  bookings: BookingModel[]
-}
-const BookingRow = ({bookings}: Props) => {
+// interface Props {
+//   bookings: BookingModel[]
+// }
+const BookingRow = () => {
 
   // ???????? no need ?
     const [isLoading, setIsLoading] = useState(false)
+    const bookings = useBookingStore((state) => state.bookings)
     //const bookingItems = useBookingItemStore((state) => state.bookingItems)
     
   return (
@@ -42,7 +44,7 @@ const BookingRow = ({bookings}: Props) => {
             <div className="col col-1" style={{fontSize: '12px'}}>{booking.user?.firstName}</div>
             <div className="col col-1" style={{fontSize: '12px'}}>{booking.tourItem?.price}</div>
             <div className="col col-1" style={{fontSize: '12px'}}>{booking.tourItem?.departureDate}</div>
-            <div className="col col-1" style={{fontSize: '12px'}}>{booking.tourItem?.price * booking.customers.length}</div>
+            <div className="col col-1" style={{fontSize: '12px'}}>{(booking.tourItem?.price || 0) * booking.customers.length}</div>
             <div className="col col-1" style={{fontSize: '12px'}}>{booking.paymentStatus}</div>
             
             <div className="col col-1">

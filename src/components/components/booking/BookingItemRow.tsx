@@ -6,17 +6,24 @@ import { useEffect, useState } from "react";
 import { CustomerModel } from "../../../models/CustomerModel";
 import CustomerForm from "../../forms/CustomerForm";
 import { tourBookingService } from "../../../config/service-config";
+import { useBookingStore } from "../../../store/useBookingStore";
 
 interface Props {
   booking: BookingModel
 }
+
+const EDIT_OPERSTION = 'edit'
+const ADD_OPERATION = 'add'
+
 const BookingItemRow = ({booking}: Props) => {
 
-  const [isEdit, setIsEdit] = useState(false);
-  const [isDelete, setIsDelete] = useState(false)
+  const [showCustomerForm, setShowCustomerForm] = useState(false);
+  const [operation, setOperation] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [customer, setCustomer] = useState<CustomerModel | null>(null)
   const [isBookingComplited, setIsBookingComplited] = useState(false);
+
+  const updateBookings = useBookingStore((state) => state.updateBooking)
 
   useEffect(() => {
       setIsBookingComplited(new Date(booking.tourItem?.departureDate || '') <= new Date())
@@ -34,54 +41,49 @@ const BookingItemRow = ({booking}: Props) => {
   }
 
   const handleEdit = (customer: CustomerModel) => {
+    setOperation(EDIT_OPERSTION)
     setCustomer(customer)
-    setIsEdit(true)
+    setShowCustomerForm(true)
   }
 
   const handleDelete = async (customerToDelete: CustomerModel) => {
-    setIsDelete(true)
-    setIsLoading(true)
     await updateBooking(customerToDelete)
-    setIsLoading(false)
-    setIsDelete(false)
   }
 
   const handleAdd = () => {
-    setIsEdit(true)
+    setOperation(ADD_OPERATION)
+    setShowCustomerForm(true)
   }
 
   const submitCustomer = async(customerUpdate: CustomerModel | null) => {
     if(customerUpdate){
-      setIsLoading(true)
       await updateBooking(customerUpdate)
-      setIsLoading(false)
     }
+    setOperation('')
     setCustomer(null)
-    setIsEdit(false)
+    setShowCustomerForm(false)
   }
 
   const updateBooking = async (customerUpdate: CustomerModel) => {
     let updatedCustomers: CustomerModel[] = [];
-    if(!customer && !isDelete){
-      // ADD
-      // TODO update tours
-      updatedCustomers = [...booking.customers, customerUpdate]
-    } else if (isDelete){
-      // DELETE
-       // TODO update tours
-      updatedCustomers = booking.customers.filter((e) => e.id !== customerUpdate.id)
-    }
-    else {
-      // UPDATE
-      updatedCustomers = booking.customers.map((e) => {
-        return e.id === customerUpdate.id ? customerUpdate : e
-      })
+    switch(operation){
+      case EDIT_OPERSTION: updatedCustomers = booking.customers.map((e) => e.id === customerUpdate.id ? customerUpdate : e);
+        break;
+      case ADD_OPERATION: updatedCustomers = [...booking.customers, customerUpdate]; 
+        break;
+      default: updatedCustomers = booking.customers.filter((e) => e.id !== customerUpdate.id); 
+        break;
     }
     const updatedBooking: BookingModel = { 
       ...booking,
       customers: updatedCustomers 
     };
+    updateBookings(updatedBooking)
+    setIsLoading(true)
     await tourBookingService.update(updatedBooking)
+    setOperation('')
+    setIsLoading(false)
+
   }
 
   return (
@@ -93,7 +95,7 @@ const BookingItemRow = ({booking}: Props) => {
           <div className="container px-5 pt-3" style={{borderRadius: '15px', background: 'rgb(242, 245, 247)'}}>
           <h6>Customer details</h6>
           {
-            isEdit 
+            showCustomerForm 
             ? (<>
               {
                 isLoading 
@@ -157,7 +159,7 @@ const BookingItemRow = ({booking}: Props) => {
                         </div>
                         <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button onClick={() => handleDelete(cust)} type="button" className="btn btn-primary">Submit</button>
+                          <button onClick={() => handleDelete(cust)} type="button" className="btn btn-primary" data-bs-dismiss="modal">Submit</button>
                         </div>
                       </div>
                     </div>

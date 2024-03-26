@@ -6,10 +6,12 @@ import BookingRow from '../components/booking/BookingRow'
 import { TourDto } from '../../models/dto/TourDto'
 import { TourItemDto } from '../../models/dto/TourItemDto'
 import { UserDto } from '../../models/dto/UserDto'
+import { useBookingStore } from '../../store/useBookingStore'
 
 const BookingHistory = () => {
 
-  const [bookings, setBookings] = useState<BookingModel[]>([])
+  //const [bookings, setBookings] = useState<BookingModel[]>([])
+  const setBookings = useBookingStore((state) => state.setBookings)
   const [isLoading, setIsLoading] = useState(false)
 
   const loadData = async () => {
@@ -58,7 +60,7 @@ const BookingHistory = () => {
           <div className="col col-1" style={{color: 'rgb(44, 48, 53)'}}>Edit</div>
         </div>
         <div className='' style={{background: 'white'}}>
-          <BookingRow bookings={bookings}/>
+          <BookingRow/>
         </div>
       </div>
       )
