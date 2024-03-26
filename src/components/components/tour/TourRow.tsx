@@ -37,20 +37,20 @@ const TourRow = ({tour, index}: Props) => {
             <div className="spinner-border text-secondary" role="status"></div>
           </div> ) 
         : (<>
-          <div className="col col-1">{index}</div>
-            <div className="col col-2">{tour.name}</div>
-            <div className="col col-2">{tour.destination}</div>
-            <div className="col col-2">{tour.duration} days</div>
-            <div className="col col-2">{tour.commission} %</div>
-            <div className="col col-1">
+          <div className="col col-3 d-none d-lg-block">{tour.id}</div>
+            <div className="col col-lg-1">{tour.name}</div>
+            <div className="col col-lg-2">{tour.destination}</div>
+            <div className="col col-lg-1 d-none d-sm-block">{tour.duration} days</div>
+            <div className="col col-lg-2">{tour.commission} %</div>
+            <div className="col col-lg-1">
               <button onClick={() => setTourItems(tour.tourItems)} className="btn" type="button" data-bs-toggle="collapse" data-bs-target={`#${tour.id}`} aria-expanded="true" aria-controls={tour.id}><MdOutlineRemoveRedEye/></button>
             </div>
-            <div className="col col-1">
+            <div className="col col-lg-1">
               <Link to={`add-update/${tour.id}`}>
                 <button onClick={() => {}} className='btn'> <TbPencil/></button>
               </Link>
             </div>
-            <div className="col col-1">
+            <div className="col col-lg-1">
               <button className='btn' onClick={() => removeTour(tour.id)}><FaRegTrashAlt/></button>
             </div>
             <div className="accordion" id="accordionExample" >
@@ -58,7 +58,7 @@ const TourRow = ({tour, index}: Props) => {
                 <div id={tour.id} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                   <div className="accordion-body" >
                   {
-                   <TourItemsRow viewMode={true}/>
+                   <TourItemsRow viewMode={true} tourItemsView={tour.tourItems}/>
                   }
                   </div>
                 </div>

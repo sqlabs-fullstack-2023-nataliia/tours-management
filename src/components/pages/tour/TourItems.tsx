@@ -28,6 +28,7 @@ const TourItems = () => {
   const [language, setLanguage] = useState('')
   const [duration, setDuration] = useState('')
   const [destination, setDestination] = useState('')
+  const [totalCommition, setTotalCommition] = useState('')
 
   useEffect(() => {
     const curTourItems: TourItemView[] = tours.flatMap((tour) => tour.tourItems.map(tourItem => ({
@@ -41,13 +42,15 @@ const TourItems = () => {
         status: tourItem.status,
         totalAvailability: tourItem.totalAvailability,
         availability: tourItem.availability,
+        commission: tour.commission,
+        price: tourItem.price
     })));
     setTourItems(curTourItems);
     setInitialTourItems(curTourItems)
+    calculateCommission(curTourItems)
 }, []);
 
 const handleFilters = () => {
-  //setTourItems([...initialTourItems])
   let curTourItems: TourItemView[] = [...initialTourItems]
   if(id) curTourItems = curTourItems.filter(e => e.id.includes(id.trim()))
   if(language) curTourItems = curTourItems.filter(e => e.language === language)
@@ -62,6 +65,7 @@ const handleFilters = () => {
     curTourItems = curTourItems.filter(e => new Date(e.departureDate) <= new Date(toDate));
   }
   setTourItems([...curTourItems])
+  calculateCommission(curTourItems)
 }
 
 const handleResetFilters = () => {
@@ -74,6 +78,7 @@ const handleResetFilters = () => {
   setDuration('')
   setDestination('')
   setTourItems([...initialTourItems])
+  calculateCommission(initialTourItems)
 }
 
 const handleSort = (filter: string, type: string, order: string) => {
@@ -84,9 +89,14 @@ const handleSort = (filter: string, type: string, order: string) => {
   setTourItems(sortedTours)
 }
 
+const calculateCommission = (items: TourItemView[]) => {
+  const result = items.reduce((res, curr) => res += (((curr.totalAvailability - curr.availability) * curr.price) * curr.commission) / 100  , 0)
+  setTotalCommition(result + '')
+}
+
   return (
     <div className="container-fluid">
-      <div className="container-fluid mb-4 py-2" style={{background: 'white', borderRadius: '15px'}}>
+      <div className="container-fluid my-4 py-2" style={{background: 'white', borderRadius: '15px'}}>
       <div className="row mx-2 px-1">
           <div className="col col-lg-9 col-md-6 col-12">
             <h2 style={{color: 'rgb(44, 48, 53)'}}>TOURS</h2>
@@ -170,10 +180,14 @@ const handleSort = (filter: string, type: string, order: string) => {
               </div>
             </div>
           </div>
+          <div className="col col-12 pt-4">
+            <p>Total commission: <label className="form-label" style={{ fontWeight: 'bold' }}>
+              {totalCommition} $</label></p>
+          </div> 
         </div>
       </div>
       <div className="row mb-2 px-2 mx-1">
-        <div className="col col-2 d-none d-xl-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+        <div className="col d-none d-xl-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           ID
           <br/>
           <button onClick={() => handleSort('id', NUMBER_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
@@ -204,11 +218,18 @@ const handleSort = (filter: string, type: string, order: string) => {
           <button onClick={() => handleSort('destination', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('destination', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
-        <div className="col col-2 d-none d-md-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+        <div className="col  d-none d-md-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
           Departure
           <br/>
           <button onClick={() => handleSort('departureDate', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('departureDate', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
+        </div>
+
+        <div className="col col-1 d-none d-xl-block" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
+          Commition
+          <br/>
+          <button onClick={() => handleSort('status', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
+          <button onClick={() => handleSort('status', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
 
         <div className="col col-xl-1" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>
@@ -217,7 +238,7 @@ const handleSort = (filter: string, type: string, order: string) => {
           <button onClick={() => handleSort('status', STRING_TYPE, ASCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundUp/></button>
           <button onClick={() => handleSort('status', STRING_TYPE, DESCENDING_ORDER)} className='btn p-0'><IoIosArrowRoundDown/></button>
         </div>
-        <div className="col col-xl-2" style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Availability</div>
+        <div className="col " style={{fontWeight: 'bold', color: 'rgb(44, 48, 53)'}}>Availability</div>
       </div>
       <div className='p-4' style={{background: 'white', borderRadius: '15px'}}>
       {

@@ -10,4 +10,6 @@ export interface TourItemView {
     status: string,
     totalAvailability: number,
     availability: number,
+    commission: number,
+    price: number
 }

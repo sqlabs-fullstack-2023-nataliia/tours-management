@@ -14,6 +14,7 @@ import Settings from "../components/pages/Settings";
 import TourPage from "../components/pages/booking/TourPage";
 import BookTourPage from "../components/pages/booking/BookTourPage";
 import BookingForm from "../components/forms/BookingForm";
+import NotificationPage from "../components/pages/NotificationPage";
 
 
 export const HOME_PATH = '/';
@@ -31,7 +32,8 @@ export const TOUR_ITEMS_PATH = '/tour-items';
 export const ADD_USER_PATH = '/users/add';
 export const USERS_PATH = '/users'
 export const SETTINGS_PATH = '/settings'
-
+export const NOTIFICATION_PATH = '/notification'
+ 
 export const BOOKING_HISTORY_PATH = '/bookings';
 export const EDIT_BOOKING_PATH = '/bookings/:bookingId/:pax'
 
@@ -49,9 +51,10 @@ export const ROUTES: RouteType[] = [
     {path: ADD_USER_PATH, label: 'Add user', element: <AddUser/>, roles: ["admin"], displayRole: [""]},
     {path: USERS_PATH, label: 'Users', element: <Users/>, roles: ["admin"], displayRole: [""]},
     {path: SETTINGS_PATH, label: 'Settings', element: <Settings/>, roles: ['admin'], displayRole: ['admin']},
+    {path: NOTIFICATION_PATH, label: 'Notification', element: <NotificationPage/>, roles: ['admin'], displayRole: ['admin']},
 
-    {path: BOOKING_HISTORY_PATH, label: 'Booking history', element: <BookingHistory/>, roles: ["admin", "agent"], displayRole: ["agent"]},
-    {path: EDIT_BOOKING_PATH, label: 'Edit booking', element: <BookingForm/>, roles: ["admin", "agent"], displayRole: ["agent"]},
+    {path: BOOKING_HISTORY_PATH, label: 'Booking history', element: <BookingHistory/>, roles: ["admin", "agent"], displayRole: ["agent", "admin"]},
+    {path: EDIT_BOOKING_PATH, label: 'Edit booking', element: <BookingForm/>, roles: ["admin", "agent"], displayRole: ["agent", "admin"]},
 
     {path: LOGIN_PATH, label: 'Login', element: <Login/>, roles: ["any"], displayRole: ["any"]},
     {path: LOGOUT_PATH, label: 'Logout', element: <Logout/>, roles: ["user", "admin", "agent"], displayRole: ["user", "admin", "agent"]},
