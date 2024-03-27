@@ -60,7 +60,7 @@ const TourForm = () => {
           currentTour.id = res.id
           currentTour.image = res.image
           addTour(res)
-          navigate(`/tours/add-update/${res.id}`);
+          navigate(`/tours/update/${res.id}`);
         } 
       }
     } else {
