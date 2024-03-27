@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import TourForm from '../../forms/TourForm'
-import TourItemForm from '../../forms/TourItemForm'
-import TourItemRow from '../../components/tour/TourItemsRow'
+import TourItemsRow from '../../components/tour/TourItemsRow'
 import { TourModel } from '../../../models/TourModel'
 import { tourService } from '../../../config/service-config'
 import { useParams } from 'react-router-dom'
 import { useTourStore } from '../../../store/useTourStore'
 import { useTourItemStore } from '../../../store/useTourItemStore'
+import TourItemForm from '../../forms/TourItemForm'
 
 const AddTour = () => {
 
@@ -28,7 +28,6 @@ const AddTour = () => {
     })();
   }, [tourId]);
 
-
   return (
     <div className='container mt-4'>
       {
@@ -44,7 +43,7 @@ const AddTour = () => {
                 <TourItemForm />
               </div>
               <div className="row">
-                <TourItemRow />
+                <TourItemsRow />
               </div>
               <div className="row my-5">
                 <div className="col col-lg-9 col-md-8 col-6"></div>

@@ -45,7 +45,7 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
 
     const firstNameHandler = (event: any) => {
         const value = event.target.value
-        if (value.length < 30 && /^[a-zA-Z -]+$/.test(value)) {
+        if (value.length < 30 && /^[a-zA-Z -]*$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.firstName = value;
             setCustomer(customerCopy)
@@ -54,7 +54,7 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
 
     const lastNameHandler = (event: any) => {
         const value = event.target.value
-        if (value.length < 30 && /^[a-zA-Z -]+$/.test(value)) {
+        if (value.length < 30 && /^[a-zA-Z -]*$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.lastName = value;
             setCustomer(customerCopy)
@@ -70,7 +70,7 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
 
     const passportNumberHandler = (event: any) => {
         const value = event.target.value
-        if (value.length < 15 && /^[a-zA-Z0-9]+$/.test(value)) {
+        if (value.length < 15 && /^[a-zA-Z0-9]*$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.passportNumber = value;
             setCustomer(customerCopy)
@@ -86,7 +86,7 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
 
     const nationalityHandler = (event: any) => {
         const value = event.target.value
-        if (value.length < 30 && /^[a-zA-Z -]+$/.test(value)) {
+        if (value.length < 30 && /^[a-zA-Z -]*$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.nationality = value;
             setCustomer(customerCopy)
@@ -97,7 +97,7 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
         if (validateInput()) {
             if(!!!customerUpdate){
                 const customerCopy = { ...customer };
-                customerCopy.id = Date.now().toLocaleString(),
+                customerCopy.id = Date.now().toString(),
                 setCustomer(customerCopy)
             }
             setIsInputValid(true)
@@ -168,37 +168,55 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
             <div className="row">
                 <h2>Plese fill details for {count && `${count}/${pax}`} peron</h2>
                 <div className="col col-lg-4 col-12 my-1">
-                    <label className="form-label" style={{ fontWeight: 'bold' }}>First name</label>
+                    <label className="form-label" style={{ fontWeight: 'bold' }}>
+                        <span style={{color: 'red'}}>*</span>
+                        First name
+                    </label>
                 </div>
                 <div className="col col-lg-8 col-12 my-1">
                     <input onChange={firstNameHandler} type="text" className="form-control" value={customer.firstName} />
                 </div>
                 <div className="col col-lg-4 col-12 my-1">
-                    <label className="form-label" style={{ fontWeight: 'bold' }}>Last name</label>
+                    <label className="form-label" style={{ fontWeight: 'bold' }}>
+                        <span style={{color: 'red'}}>*</span>
+                        Last name
+                    </label>
                 </div>
                 <div className="col col-lg-8 col-12 my-1">
                     <input onChange={lastNameHandler} type="text" className="form-control" value={customer.lastName} />
                 </div>
                 <div className="col col-lg-4 col-12 my-1">
-                    <label className="form-label" style={{ fontWeight: 'bold' }}>Email</label>
+                    <label className="form-label" style={{ fontWeight: 'bold' }}>
+                        <span style={{color: 'red'}}>*</span>
+                        Email
+                    </label>
                 </div>
                 <div className="col col-lg-8 col-12 my-1">
                     <input onChange={emailHandler} type="text" className="form-control" value={customer.email} />
                 </div>
                 <div className="col col-lg-4 col-12 my-1">
-                    <label className="form-label" style={{ fontWeight: 'bold' }}>Passport number</label>
+                    <label className="form-label" style={{ fontWeight: 'bold' }}>
+                        <span style={{color: 'red'}}>*</span>
+                        Passport number
+                    </label>
                 </div>
                 <div className="col col-lg-8 col-12 my-1">
                     <input onChange={passportNumberHandler} type="text" className="form-control" value={customer.passportNumber} />
                 </div>
                 <div className="col col-lg-4 col-12 my-1">
-                    <label className="form-label" style={{ fontWeight: 'bold' }}>Nationality</label>
+                    <label className="form-label" style={{ fontWeight: 'bold' }}>
+                        <span style={{color: 'red'}}>*</span>
+                        Nationality
+                    </label>
                 </div>
                 <div className="col col-lg-8 col-12 my-1">
                     <input onChange={nationalityHandler} type="text" className="form-control" value={customer.nationality} />
                 </div>
                 <div className="col col-lg-4 col-12 my-1">
-                    <label className="form-label" style={{ fontWeight: 'bold' }}>Date of birth</label>
+                    <label className="form-label" style={{ fontWeight: 'bold' }}>
+                        <span style={{color: 'red'}}>*</span>
+                        Date of birth
+                    </label>
                 </div>
                 <div className="col col-lg-8 col-12 my-1">
                     <input

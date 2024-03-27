@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import TourItemRow from '../../components/tour/TourItemRow';
+import TourItemsList from '../../components/tour/TourItemsList';
 import { useTourStore } from '../../../store/useTourStore';
 import { TourItemView } from '../../../models/TourItemView';
 import { IoIosArrowRoundUp } from "react-icons/io";
@@ -13,7 +13,7 @@ const ASCENDING_ORDER = 'ascending'
 const MIN_DATE_VALUE = '2023-12-31'
 const MAX_DATE_VALUE = new Date(`${new Date().getFullYear() + 2}-12-31`).toISOString().split("T")[0]
 
-const TourItems = () => {
+const TourItemsPage = () => {
 
   const tours = useTourStore((state) => state.tours)
   const settings = useTourSettingsStore((state) => state.settings)
@@ -49,7 +49,6 @@ const TourItems = () => {
     })));
     setTourItems(curTourItems);
     setInitialTourItems(curTourItems)
-    //calculateCommission(curTourItems)
     calculateToursPrice(curTourItems)
     calculateSoldToursPrice(curTourItems)
 }, []);
@@ -262,7 +261,7 @@ const calculateSoldToursPrice = (items: TourItemView[]) => {
         tours.length === 0 
         ? (<div className='container d-flex justify-content-center'><h2>No Tour items Found</h2></div>) 
         : (<>
-          <TourItemRow tourItemsView={tourItems} />
+          <TourItemsList tourItemsView={tourItems} />
         </>
         )
       }
@@ -271,4 +270,4 @@ const calculateSoldToursPrice = (items: TourItemView[]) => {
   )
 }
 
-export default TourItems
+export default TourItemsPage

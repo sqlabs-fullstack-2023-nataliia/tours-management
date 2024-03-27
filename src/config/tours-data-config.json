@@ -2,5 +2,8 @@
     "languages": ["English", "Spanish", "French", "Russian", "Hebrew"],
     "availability": [15, 20, 25, 30],
     "status": ["pending", "available", "fully booked", "completed", "canceled"],
-    "commission": [5, 10, 15, 20, 25]
+    "commission": [5, 10, 15, 20, 25],
+
+
+    "noImageFile": "https://firebasestorage.googleapis.com/v0/b/tours-app-20084.appspot.com/o/gallery%2Fno-image.webp?alt=media&token=03ec69ad-066d-4f6d-984e-821285bf07b4"
 }
