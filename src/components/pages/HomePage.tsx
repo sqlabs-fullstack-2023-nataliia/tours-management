@@ -7,10 +7,10 @@ const HomePage = () => {
   return (
     <div>
       <div className="container d-flex justify-content-center pt-5">
-        <div onClick={() => navigate('/tours/book')} className='main_header' style={{background: 'rgba(255, 255, 255, 0.5)', borderRadius: '25px'}}>
-        <div className='p-4 main_header' style={{ borderRadius: '25px', opacity: '70%'}}>
-          <h1 className='animate_animated animate_rubberBand' style={{fontWeight: 'bold', fontSize: '65px'}}>Choose your next destination</h1>
-        </div>
+        <div onClick={() => navigate('/tours/book')} className='main_header' style={{background: 'rgba(255, 255, 255, 0.3)', borderRadius: '50px'}}>
+        <button className='p-3 main_header btn' style={{ borderRadius: '50px', opacity: '90%'}}>
+          <h3 className='animate_animated animate_rubberBand' style={{fontWeight: 'bold', fontSize: '45px'}}>Choose your next destination</h3>
+        </button>
         </div>
       </div>
       <img  style={{width: '100%'}} id="video-background" src={'https://firebasestorage.googleapis.com/v0/b/tours-app-20084.appspot.com/o/gallery%2Fpietro-de-grandi-T7K4aEPoGGk-unsplash.jpg?alt=media&token=828fa40b-8e5c-4339-b685-1ef0e1afb3c6'}/>

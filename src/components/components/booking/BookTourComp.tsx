@@ -9,9 +9,9 @@ import { tourService } from '../../../config/service-config'
 import { TourModel } from '../../../models/TourModel'
 import { useRelevantToursStore } from '../../../store/useRelevantToursStore'
 import { useRelevantTourItemsStore } from '../../../store/useRelevantTourItemsStore'
-import TourDetailsComp from '../TourDetailsComp'
 
 const BOOKING_CONFIRMATION_MESSAGE = 'Your order was successfully placed. Your booking confirmation number is: '
+const ERROR_MESSAGE = 'Something went wrong, please try again'
 
 const BookTourComp = () => {
 
@@ -45,21 +45,25 @@ const BookTourComp = () => {
 
     const confirmationFn = async(booking: BookingModel) => {
         setModalOpen(true)
-        setBookingId(booking.id)
-        setMessage(BOOKING_CONFIRMATION_MESSAGE + booking.id)
-        if(relevantTourItem && pax && relevantTour){
-            const newAvailability = relevantTourItem?.availability - +pax;
-            const tourItemCopy = { ...relevantTourItem }
-            tourItemCopy.availability = newAvailability
-            const currTour = (await tourService.get(relevantTour?.id)).data() as TourModel 
-            const updatedTourItems = currTour.tourItems.map((e: any) => {
-                if(e.id === relevantTourItem.id){
-                    e.availability = newAvailability
-                }
-                return e;
-            })
+        if(booking){
+            setBookingId(booking.id)
+            setMessage(BOOKING_CONFIRMATION_MESSAGE + booking.id)
+            if(relevantTourItem && pax && relevantTour){
+                const newAvailability = relevantTourItem?.availability - +pax;
+                const tourItemCopy = { ...relevantTourItem }
+                tourItemCopy.availability = newAvailability
+                const currTour = (await tourService.get(relevantTour?.id)).data() as TourModel 
+                const updatedTourItems = currTour.tourItems.map((e: any) => {
+                    if(e.id === relevantTourItem.id){
+                        e.availability = newAvailability
+                    }
+                    return e;
+                })
             
-            await tourService.update({ ...relevantTour, tourItems: updatedTourItems })
+                await tourService.update({ ...relevantTour, tourItems: updatedTourItems })
+            }
+        } else {
+            setMessage(ERROR_MESSAGE)
         }
     }
 
@@ -78,13 +82,6 @@ const BookTourComp = () => {
                     }
                 </div>
                 <div className={`col col-lg-4 col-12 ${pax && paxCount <= +pax ? 'd-flex' : ''}`} >
-
-                {/* <TourDetailsComp 
-                    duration={relevantTour?.duration || 1} 
-                    departure={relevantTourItem?.departureDate || ''} 
-                    language={relevantTourItem?.language || ''} 
-                    price={relevantTourItem?.price || 0} 
-                    pax={!!pax ? +pax : 1}/> */}
 
                      <div className="row p-2 mx-1" style={{ background: 'rgb(237, 244, 252)', borderRadius: '15px' }}>
                         <div className="col-5 my-2">

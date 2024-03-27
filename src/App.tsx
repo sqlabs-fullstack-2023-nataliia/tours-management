@@ -25,6 +25,9 @@ const App = () => {
   const relevantRoutes: RouteType[]
     = useMemo<RouteType[]>(() => getRelevantRoutes(user?.role || 'any'), [user])
 
+  const displayRoutes: RouteType[]
+    = useMemo<RouteType[]>(() => getDisplayRoutes(user?.role || 'any'), [user])
+
   useEffect(() => {
      loadTours()
      loadSettings()
@@ -89,7 +92,7 @@ const App = () => {
       ) 
       : (
         <>
-        <Navigator routes={relevantRoutes} />
+        <Navigator routes={displayRoutes} />
           <Routes>
             {getRoutes(relevantRoutes)}
           </Routes>
@@ -108,5 +111,9 @@ const getRoutes = (routes: RouteType[]) => {
 }
 
 const getRelevantRoutes = (role: string) => {
+  return ROUTES.filter(e => e.roles.includes(role) && e.roles.includes(role))
+}
+
+const getDisplayRoutes = (role: string) => {
   return ROUTES.filter(e => e.roles.includes(role) && e.displayRole.includes(role))
 }
