@@ -45,7 +45,7 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
 
     const firstNameHandler = (event: any) => {
         const value = event.target.value
-        if (value.length < 30 && /^[a-zA-Z -]+$/.test(value)) {
+        if (value.length < 30 && /^[a-zA-Z -]*$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.firstName = value;
             setCustomer(customerCopy)
@@ -54,7 +54,7 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
 
     const lastNameHandler = (event: any) => {
         const value = event.target.value
-        if (value.length < 30 && /^[a-zA-Z -]+$/.test(value)) {
+        if (value.length < 30 && /^[a-zA-Z -]*$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.lastName = value;
             setCustomer(customerCopy)
@@ -70,7 +70,7 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
 
     const passportNumberHandler = (event: any) => {
         const value = event.target.value
-        if (value.length < 15 && /^[a-zA-Z0-9]+$/.test(value)) {
+        if (value.length < 15 && /^[a-zA-Z0-9]*$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.passportNumber = value;
             setCustomer(customerCopy)
@@ -86,7 +86,7 @@ const CustomerForm = ({ submitCustomer, count, customerUpdate }: Props) => {
 
     const nationalityHandler = (event: any) => {
         const value = event.target.value
-        if (value.length < 30 && /^[a-zA-Z -]+$/.test(value)) {
+        if (value.length < 30 && /^[a-zA-Z -]*$/.test(value)) {
             const customerCopy = { ...customer };
             customerCopy.nationality = value;
             setCustomer(customerCopy)

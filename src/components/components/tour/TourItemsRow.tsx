@@ -2,7 +2,7 @@ import { TbPencil } from "react-icons/tb";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useTourItemStore } from "../../../store/useTourItemStore";
 import { TourItemModel } from "../../../models/TourItemModel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // TODO take status from firebase + mb add color picker to settings
 const statusColor: { [key: string]: string } = {
@@ -24,6 +24,17 @@ const TourItemRow = ({viewMode, tourItemsView}: Props) => {
   const setTourItem = useTourItemStore((state) => state.setTourItem)
   const removeTourItem = useTourItemStore((state) => state.deleteTourItem)
   const [curTourItems, setCurTourItems] = useState<TourItemModel[]>(!!tourItemsView ? [...tourItemsView] : [...tourItems])
+  // const [isBooked, setIsBooked] = useState(false)
+  
+  // useEffect(() => {
+  //   setIsBooked(() => isTourBooked())
+  // }, [])
+
+  // const isTourBooked = () => {
+  //   let res = tour.tourItems.reduce((res, cur) => res += cur.totalAvailability - cur.availability, 0) === 0
+  //   console.log(res)
+  //   return tour.tourItems.reduce((res, cur) => res += cur.totalAvailability - cur.availability, 0) !== 0
+  // }
 
   return (
     <div className="container" >
@@ -59,7 +70,13 @@ const TourItemRow = ({viewMode, tourItemsView}: Props) => {
                     {
                       !!removeTourItem &&
                       <div className="col col-1 p-2">
-                        <button className='accordion-button pt-2' onClick={() => removeTourItem(tourItem.id)}><FaRegTrashAlt /></button>
+                        <button 
+                          // disabled={tourItem.totalAvailability - tourItem.availability !== 0}
+                          // style={(tourItem.totalAvailability - tourItem.availability !== 0) ? { border: 'none' } : {}}
+                          className='accordion-button pt-2' 
+                          onClick={() => removeTourItem(tourItem.id)}>
+                            <FaRegTrashAlt />
+                        </button>
                       </div>
                     }
                       </>
