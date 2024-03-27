@@ -58,12 +58,12 @@ const TourRow = ({tour}: Props) => {
                 <FaRegImage/>
               </button>
             </div>
-            <div className="col col-lg-1 d-none d-md-block">
+            <div className="col col-lg-1 d-none d-md-block" id="accordionExample"> 
               <button 
                 onClick={() => setTourItems(tour.tourItems)} 
-                className="btn" type="button" data-bs-toggle="collapse" 
-                data-bs-target={`#${tour.id}`} aria-expanded="true" 
-                aria-controls={tour.id}>
+                className="btn collapsed" type="button" data-bs-toggle="collapse" 
+                data-bs-target={`#t-${tour.id}`} aria-expanded="false" 
+                aria-controls={`t-${tour.id}`}>
                   <MdOutlineRemoveRedEye/>
               </button>
             </div>
@@ -81,18 +81,17 @@ const TourRow = ({tour}: Props) => {
                   <FaRegTrashAlt/>
               </button>
             </div>
-            <div className="accordion" id="accordionExample" >
+            <div className="accordion" >
               <div className="accordion-item" style={{background: 'rgb(242, 245, 247)', borderRadius: '15px'}}>
-                <div id={tour.id} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div id={`t-${tour.id}`} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                   <div className="accordion-body" >
                   {
-                   <TourItemsRow viewMode={true} tourItemsView={tour.tourItems}/>
+                   <TourItemsRow currItems={tour.tourItems}/>
                   }
                   </div>
                 </div>
               </div>
             </div>
-
             <div className="modal fade" id={tour.id.substring(0, 5)} tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div className="modal-dialog">
                 <div className="modal-content">
@@ -140,6 +139,8 @@ const TourRow = ({tour}: Props) => {
 
           </>)
         }
+
+
          
 
     </div>

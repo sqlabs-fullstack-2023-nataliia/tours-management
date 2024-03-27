@@ -4,6 +4,7 @@ import { tourService } from '../../config/service-config'
 import { useNavigate } from 'react-router-dom'
 import { useTourSettingsStore } from '../../store/useTourSettingsStore'
 import { TourModel } from '../../models/TourModel'
+import { useTourItemStore } from '../../store/useTourItemStore'
 
 const initialTour = {
   id: '',
@@ -31,6 +32,7 @@ const TourForm = () => {
   const removeTour = useTourStore((state) => state.deleteTour)
   const addTour = useTourStore((state) => state.addTour)
   const updateTour = useTourStore((state) => state.updateTour)
+  const tourItems = useTourItemStore((state) => state.tourItems)
 
   const [currentTour, setCurrentTour] = useState<TourModel>(tour || initialTour);
   const [isBooked, setIsBooked] = useState(false)
@@ -50,7 +52,7 @@ const TourForm = () => {
     if(validateInput()){
       if (currentTour.id) {
         updateTour(currentTour)
-        await tourService.update(currentTour)
+        await tourService.update({ ...currentTour, tourItems: tourItems })
         
       } else {
         const res = await tourService.add(currentTour)
@@ -146,31 +148,31 @@ const TourForm = () => {
             <h6 style={{ fontWeight: 'bold' }}>Tour</h6>
             <div className="row py-4" style={{ background: 'rgb(251, 253, 255)', borderRadius: '15px' }}>
               <div className="col col-3 mt-1">
-                <label className="form-label">Name<span style={{color: 'red'}}>*</span></label>
+                <label className="form-label"><span style={{color: 'red'}}>*</span>Name</label>
               </div>
               <div className="col col-9 mb-2">
                 <input onChange={nameHandler} type="text" className="form-control" value={currentTour.name} />
               </div>
               <div className="col col-3 mt-1">
-                <label className="form-label">Destination<span style={{color: 'red'}}>*</span></label>
+                <label className="form-label"><span style={{color: 'red'}}>*</span>Destination</label>
               </div>
               <div className="col col-9 mb-2">
                 <input onChange={destinationHandler} type="text" className="form-control" value={currentTour.destination} />
               </div>
               <div className="col col-3 mt-1">
-                <label className="form-label">Duration<span style={{color: 'red'}}>*</span></label>
+                <label className="form-label"><span style={{color: 'red'}}>*</span>Duration</label>
               </div>
               <div className="col col-9 mb-2">
                 <input onKeyDown={(e) => { e.preventDefault() }} onChange={durationHandler} type="number" className="form-control" min={1} max={15} value={currentTour.duration} />
               </div>
               <div className="col col-3 mt-1">
-                <label className="form-label">Image</label>
+                <label className="form-label">&nbsp;&nbsp;Image</label>
               </div>
               <div className="col col-9 mb-2">
                 <input  onChange={imageHandler} type="file" className="form-control" name={'no name'} />
               </div>
               <div className="col col-3 mt-1">
-                <label className="form-label">Commission<span style={{color: 'red'}}>*</span></label>
+                <label className="form-label"><span style={{color: 'red'}}>*</span>Commission</label>
               </div>
               <div className="col col-9 mb-2">
                 <div className="input-group">

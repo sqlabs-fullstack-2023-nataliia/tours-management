@@ -8,7 +8,7 @@ import { RouteType } from "../models/RouteType";
 import Tours from "../components/pages/tour/Tours";
 import AddUser from "../components/forms/UserForm";
 import Users from "../components/pages/Users";
-import TourItems from "../components/pages/tour/TourItems";
+import TourItems from "../components/pages/tour/TourItemsPage";
 import AddTour from "../components/pages/tour/AddTour";
 import Settings from "../components/pages/Settings";
 import TourPage from "../components/pages/booking/TourPage";

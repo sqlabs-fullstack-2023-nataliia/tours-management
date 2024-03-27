@@ -1,94 +1,78 @@
-import { TbPencil } from "react-icons/tb";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { useTourItemStore } from "../../../store/useTourItemStore";
 import { TourItemModel } from "../../../models/TourItemModel";
 import { useEffect, useState } from "react";
-
-// TODO take status from firebase + mb add color picker to settings
-const statusColor: { [key: string]: string } = {
-  'Pending': '#fff7e6',
-  'Available': '#ebfaeb',
-  'Fully booked': '#e6f5ff',
-  'Canceled': '#ffe6e6',
-  'Completed': '#f0f0f5'
-}
+import TourItemRow from "./TourItemRow";
+import { tourService } from "../../../config/service-config";
+import { useTourStore } from "../../../store/useTourStore";
 
 interface Props {
-  tourItemsView?: TourItemModel[],
-  viewMode?: boolean
+  currItems?: TourItemModel[]
 }
 
-const TourItemRow = ({viewMode, tourItemsView}: Props) => {
+const TourItemsRow = ({currItems}: Props) => {
 
   const tourItems = useTourItemStore((state) => state.tourItems)
-  const setTourItem = useTourItemStore((state) => state.setTourItem)
-  const removeTourItem = useTourItemStore((state) => state.deleteTourItem)
-  const [curTourItems, setCurTourItems] = useState<TourItemModel[]>(!!tourItemsView ? [...tourItemsView] : [...tourItems])
-  // const [isBooked, setIsBooked] = useState(false)
-  
-  // useEffect(() => {
-  //   setIsBooked(() => isTourBooked())
-  // }, [])
+  const tour = useTourStore((state) => state.tour)
+  const setTour = useTourStore((state) => state.setTour)
+  const updateTour = useTourStore((state) => state.updateTour)
 
-  // const isTourBooked = () => {
-  //   let res = tour.tourItems.reduce((res, cur) => res += cur.totalAvailability - cur.availability, 0) === 0
-  //   console.log(res)
-  //   return tour.tourItems.reduce((res, cur) => res += cur.totalAvailability - cur.availability, 0) !== 0
-  // }
+  const [curTourItems, setCurTourItems] = useState<TourItemModel[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setCurTourItems(currItems || tourItems)
+  }, [tourItems, currItems])
+
+  useEffect(() => {
+    !!!currItems && updateCurrentTour()
+  }, [tourItems])
+
+  const updateCurrentTour = async () => {
+    setIsLoading(true)
+    if (tour) {
+      updateTour({ ...tour, tourItems: tourItems });
+      setTour({ ...tour, tourItems: tourItems })
+      await tourService.update({ ...tour, tourItems: tourItems })
+    }
+    setIsLoading(false)
+  }
 
   return (
     <div className="container" >
       {
+        isLoading 
+        ? (<div className='container d-flex justify-content-center mt-5' >
+            <div className="spinner-border text-secondary" role="status"></div>
+          </div>) 
+        : (<>
+        {
         curTourItems.length === 0
           ? (<div className='d-flex justify-content-center ' ><h3>No tour options found</h3></div>)
           : (<div className="container-fluid" >
-            <div className="row py-3 mb-2 px-2">
-              <div className="col col-lg-2" style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>ID</div>
-              <div className={`col col-2 d-none d-${!!viewMode ? 'lg' : 'lg'}-block`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Departure</div>
-              <div className={`col col-xl-${!!viewMode ? '2' : '1'} col-2`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Language</div>
-              <div className={`col col-lg-2`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Status</div>
-              <div className={`col col-lg-2`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Availability</div>
-              <div className={`col d-none d-${!!viewMode ? 'md' : 'xl'}-block`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Price</div>
-              {!!!viewMode && <div className="col col-lg-2"></div>}
-              
+            <div className="row py-3 mb-2 p-4">
+              <div className="col col-lg-2 d-none d-lg-block" style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>ID</div>
+              <div className={`col col-2 d-none d-lg-block`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Departure</div>
+              <div className={`col col-xl-1 `} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Language</div>
+              <div className={`col d-none d-xl-block`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Status</div>
+              <div className={`col `} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Availability</div>
+              <div className={`col d-none d-md-block`} style={{ fontWeight: 'bold', color: 'rgb(44, 48, 53)' }}>Price</div>
+              {
+                !!!currItems && <div className="col col-2"></div>
+              }
             </div>
             <div className='p-4' style={{ background: 'white', borderRadius: '15px' }}>
               {
                 curTourItems.map((tourItem, index) => {
-                  return <div className="row" key={index} style={{ background: statusColor[tourItem.status] }}>
-                    <div className="col col-lg-2 pt-2">{tourItem.id}</div>
-                    <div className={`col col-2 pt-2 d-none d-${!!viewMode ? 'lg' : 'lg'}-block`}>{tourItem.departureDate}</div>
-                    <div className={`col pt-2 col-xl-${!!viewMode ? '2' : '1'} col-2`}>{tourItem.language}</div>
-                    <div className={`col col-lg-2 pt-2`}>{tourItem.status}</div>
-                    <div className={`col col-lg-2 pt-2`}>{tourItem.availability}</div>
-                    <div className={`col pt-2 d-none d-${!!viewMode ? 'md' : 'xl'}-block`}>{tourItem.price}</div>
-                    {
-                      !!!viewMode && <>
-                      <div className="col col-1 p-2">
-                      <button onClick={() => setTourItem(tourItem)} className='accordion-button pt-2' ><TbPencil /></button>
-                      </div>
-                    {
-                      !!removeTourItem &&
-                      <div className="col col-1 p-2">
-                        <button 
-                          // disabled={tourItem.totalAvailability - tourItem.availability !== 0}
-                          // style={(tourItem.totalAvailability - tourItem.availability !== 0) ? { border: 'none' } : {}}
-                          className='accordion-button pt-2' 
-                          onClick={() => removeTourItem(tourItem.id)}>
-                            <FaRegTrashAlt />
-                        </button>
-                      </div>
-                    }
-                      </>
-                    }
-                  </div>
+                  return <TourItemRow tourItem={tourItem} key={index} viewMode={!!currItems}/>
                 })
               }
             </div>
           </div>)
+        }
+        </>)
       }
     </div>
   )
 }
 
-export default TourItemRow
+export default TourItemsRow

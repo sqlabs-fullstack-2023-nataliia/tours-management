@@ -223,7 +223,7 @@ const BookingHistory = () => {
           <div className="col col-12 pt-4">
             <p>Total commission: 
               <label className="form-label" style={{ fontWeight: 'bold' }}>
-                {commission} $
+                  &nbsp;&nbsp;{commission} $
               </label>
             </p>
           </div> 

@@ -37,11 +37,11 @@ const Tours = () => {
   const handleSort = ([filter, type, order]: string[]) => {
     let sortedTours: TourModel[] = []
     if(filter === 'tourItems') {
-      sortedTours = [...tours].sort((a: any, b: any) => order === ASCENDING_ORDER ? +a[filter].length - +b[filter].length : +b[filter].length - +a[filter].length);
+      sortedTours = [...initialTours].sort((a: any, b: any) => order === ASCENDING_ORDER ? +a[filter].length - +b[filter].length : +b[filter].length - +a[filter].length);
     } else {
       sortedTours = type === 'string' 
-      ? [...tours].sort((a: any, b: any) => order === ASCENDING_ORDER ? a[filter].localeCompare(b[filter]) : b[filter].localeCompare(a[filter])) 
-      : [...tours].sort((a: any, b: any) => order === ASCENDING_ORDER ? +a[filter] - +b[filter] : +b[filter] - +a[filter]);
+      ? [...initialTours].sort((a: any, b: any) => order === ASCENDING_ORDER ? a[filter].localeCompare(b[filter]) : b[filter].localeCompare(a[filter])) 
+      : [...initialTours].sort((a: any, b: any) => order === ASCENDING_ORDER ? +a[filter] - +b[filter] : +b[filter] - +a[filter]);
       
     }
 
@@ -52,7 +52,7 @@ const Tours = () => {
     let curTourItems: TourModel[] = [...tours]
     if(name) curTourItems = curTourItems.filter(e => e.name.toLocaleLowerCase().includes(name.trim().toLocaleLowerCase()))
     if(duration) curTourItems = curTourItems.filter(e => e.duration === +duration)
-    if(destination) curTourItems = curTourItems.filter(e => e.destination === destination)
+    if(destination) curTourItems = curTourItems.filter(e => e.destination.toLowerCase() === destination.trim().toLowerCase())
     setInitialTours([...curTourItems])
   }
   
