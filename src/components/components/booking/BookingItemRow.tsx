@@ -5,20 +5,22 @@ import { MdOutlinePersonAddAlt } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { CustomerModel } from "../../../models/CustomerModel";
 import CustomerForm from "../../forms/CustomerForm";
-import { tourBookingService } from "../../../config/service-config";
+import { tourBookingService, tourService } from "../../../config/service-config";
 import { useBookingStore } from "../../../store/useBookingStore";
+import { TourModel } from "../../../models/TourModel";
 
 interface Props {
   booking: BookingModel
 }
 
-const EDIT_OPERSTION = 'edit'
+const EDIT_OPERATION = 'edit'
 const ADD_OPERATION = 'add'
+const DELETE_OPERATION = 'delete'
 
 const BookingItemRow = ({booking}: Props) => {
 
   const [showCustomerForm, setShowCustomerForm] = useState(false);
-  const [operation, setOperation] = useState('')
+  const [operation, setOperation] = useState(DELETE_OPERATION)
   const [isLoading, setIsLoading] = useState(false)
   const [customer, setCustomer] = useState<CustomerModel | null>(null)
   const [isBookingComplited, setIsBookingComplited] = useState(false);
@@ -41,7 +43,7 @@ const BookingItemRow = ({booking}: Props) => {
   }
 
   const handleEdit = (customer: CustomerModel) => {
-    setOperation(EDIT_OPERSTION)
+    setOperation(EDIT_OPERATION)
     setCustomer(customer)
     setShowCustomerForm(true)
   }
@@ -59,7 +61,7 @@ const BookingItemRow = ({booking}: Props) => {
     if(customerUpdate){
       await updateBooking(customerUpdate)
     }
-    setOperation('')
+    setOperation(DELETE_OPERATION)
     setCustomer(null)
     setShowCustomerForm(false)
   }
@@ -67,7 +69,7 @@ const BookingItemRow = ({booking}: Props) => {
   const updateBooking = async (customerUpdate: CustomerModel) => {
     let updatedCustomers: CustomerModel[] = [];
     switch(operation){
-      case EDIT_OPERSTION: updatedCustomers = booking.customers.map((e) => e.id === customerUpdate.id ? customerUpdate : e);
+      case EDIT_OPERATION: updatedCustomers = booking.customers.map((e) => e.id === customerUpdate.id ? customerUpdate : e);
         break;
       case ADD_OPERATION: updatedCustomers = [...booking.customers, customerUpdate]; 
         break;
@@ -80,10 +82,28 @@ const BookingItemRow = ({booking}: Props) => {
     };
     updateBookings(updatedBooking)
     setIsLoading(true)
-    await tourBookingService.update(updatedBooking)
-    setOperation('')
+    await tourBookingService.update(updatedBooking);
+    (operation !== EDIT_OPERATION) && await updateTour()
+    setOperation(DELETE_OPERATION)
     setIsLoading(false)
+  }
 
+  const updateTour = async () => {
+    const tour = (await tourService.get(booking.tour?.id || '')).data() as TourModel
+    const tourItem = tour.tourItems.find(e => e.id == booking.tourItem?.id);
+    if(tour && tourItem){
+      const newAvailability = operation === ADD_OPERATION ? tourItem?.availability - 1 : tourItem?.availability + 1;
+      const tourItemCopy = { ...tourItem }
+      tourItemCopy.availability = newAvailability
+      const currTour = (await tourService.get(tour?.id)).data() as TourModel 
+      const updatedTourItems = currTour.tourItems.map((e: any) => {
+          if(e.id === tourItem.id){
+              e.availability = newAvailability
+          }
+          return e;
+        })
+        await tourService.update({ ...tour, tourItems: updatedTourItems })
+      }
   }
 
   return (
@@ -106,9 +126,9 @@ const BookingItemRow = ({booking}: Props) => {
               }
             </>) 
             : (<>
-                      {
-          booking.customers.map((cust, i) => {
-            return <div className="row" key={i} >
+              {
+              booking.customers.map((cust, i) => {
+                return <div className="row" key={i} >
                 {
                     i === 0 && <hr/>
                 }
@@ -135,7 +155,6 @@ const BookingItemRow = ({booking}: Props) => {
                   </>) 
                   : (<div className="col col-3"></div>)
                 }
-
                 <div className="col col-4"><p>Last name</p></div>
                 <div className="col col-6"><h6>{cust.lastName}</h6></div>
                 <div className="col col-4"><p>Email</p></div>
@@ -147,7 +166,6 @@ const BookingItemRow = ({booking}: Props) => {
                 <div className="col col-4"><p>Nationalty</p></div>
                 <div className="col col-6"><h6>{cust.nationality}</h6></div>
                 <hr/>
-
                 <>
                   <div className="modal fade" id={i + cust.dateOfBirth} tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
@@ -175,8 +193,9 @@ const BookingItemRow = ({booking}: Props) => {
 
           </div>
         </div>
-        <div className="col col-12 col-lg-4 mb-2" style={{background: 'rgb(237, 244, 252)', borderRadius: '15px'}}>
-          <div className="row p-2 mx-1">
+        <div className="col col-12 col-lg-4 mb-2" >
+          <div className="container" style={{background: 'rgb(237, 244, 252)', borderRadius: '15px', height: '100%'}}>
+          <div className="row p-2 mx-1" >
             <h6 className="px-2 pt-2">Tour details</h6>
             <hr/>
             <div className="col-5 ">
@@ -216,8 +235,9 @@ const BookingItemRow = ({booking}: Props) => {
               <h5>{(booking.tourItem?.price || 1) * booking.customers.length} $</h5>
             </div>
           </div>
+          </div>
         </div>
-        <div className="col col-12 col-lg-8" >
+        <div className="col col-12 col-lg-8 mb-2" >
           <div className="container px-5 pt-3" style={{borderRadius: '15px', background: 'rgb(242, 245, 247)'}}>
             <div className="row">
             <h6>Booking status </h6>
@@ -237,8 +257,9 @@ const BookingItemRow = ({booking}: Props) => {
             </div>
           </div>
         </div>
-        <div className="col col-12 col-lg-4" >
-          <div className="row p-2 " style={{borderRadius: '15px', background: 'rgb(237, 244, 252)'}}>
+        <div className="col col-12 col-lg-4 mb-2" >
+          <div className="container" style={{borderRadius: '15px', background: 'rgb(237, 244, 252)'}}>
+          <div className="row p-2" >
             <h6>Commission details</h6>
             <hr/>
             <div className="col col-5 ">
@@ -253,6 +274,7 @@ const BookingItemRow = ({booking}: Props) => {
             <div className="col col-7 ">
               <h5>{(((booking.tourItem?.price || 1) * booking.customers.length) * (booking.tour?.commission || 1)) / 100 } $</h5>
             </div>
+          </div>
           </div>
         </div>
 

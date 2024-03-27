@@ -1,6 +1,6 @@
 import Basket from "../components/pages/Basket";
 import BookTour from "../components/pages/booking/BookTour";
-import BookingHistory from "../components/pages/BookingHistory";
+import BookingHistory from "../components/pages/BookingHistoryPage";
 import HomePage from "../components/pages/HomePage";
 import Login from "../components/forms/LoginForm";
 import Logout from "../components/pages/Logout";
@@ -13,10 +13,10 @@ import AddTour from "../components/pages/tour/AddTour";
 import Settings from "../components/pages/Settings";
 import TourPage from "../components/pages/booking/TourPage";
 import BookTourPage from "../components/pages/booking/BookTourPage";
-import BookingForm from "../components/forms/BookingForm";
 import NotificationPage from "../components/pages/NotificationPage";
+import NotFoundPage from "../components/pages/NotFoundPage";
 
-
+export const NOT_FOUND_PATH = '*'
 export const HOME_PATH = '/';
 export const TOURS_VIEW_PATH = '/tours/book';
 export const TOUR_VIEW_PATH = '/tours/book/:tourId'
@@ -38,11 +38,12 @@ export const BOOKING_HISTORY_PATH = '/bookings';
 export const EDIT_BOOKING_PATH = '/bookings/:bookingId/:pax'
 
 export const ROUTES: RouteType[] = [
+    {path: NOT_FOUND_PATH, label: 'Not Found', element: <NotFoundPage/>, roles: ["any", "user", "admin", "agent"], displayRole: [""] },
     {path: HOME_PATH, label: 'Home', element: <HomePage/>, roles: ["any", "user", "admin", "agent"], displayRole: ["user", "any", "agent", "admin"]},
     {path: TOURS_VIEW_PATH, label: 'Tours', element: <BookTour/>, roles: ["any", "user", "admin", "agent"], displayRole: ["user", "any", "agent"]},
      //{path: TOUR_VIEW_PATH, label: 'Tour view', element: <TourPage/>, roles: ["any", "user", "admin", "agent"], displayRole: [""]},
-    {path: TOUR_VIEW_PATH, label: 'Tour view', element: <TourPage/>, roles: ["any", "user", "admin", "agent"], displayRole: ["agent", "user"]},
-    {path: BOOK_TOUR_PATH, label: 'Book tour', element: <BookTourPage/>, roles: ["user", "admin", "agent"], displayRole: ["agent", "user"]},
+    {path: TOUR_VIEW_PATH, label: 'Tour view', element: <TourPage/>, roles: ["any", "user", "admin", "agent"], displayRole: [""]},
+    {path: BOOK_TOUR_PATH, label: 'Book tour', element: <BookTourPage/>, roles: ["user", "admin", "agent"], displayRole: [""]},
     {path: BASKET_PATH, label: 'Basket', element: <Basket/>, roles: [""], displayRole: ["any", "user"]},
 
     {path: ADD_TOUR_PATH, label: 'Add tour', element: <AddTour/>, roles: ["admin"], displayRole: ["admin"]},
@@ -51,10 +52,9 @@ export const ROUTES: RouteType[] = [
     {path: ADD_USER_PATH, label: 'Add user', element: <AddUser/>, roles: ["admin"], displayRole: [""]},
     {path: USERS_PATH, label: 'Users', element: <Users/>, roles: ["admin"], displayRole: [""]},
     {path: SETTINGS_PATH, label: 'Settings', element: <Settings/>, roles: ['admin'], displayRole: ['admin']},
-    {path: NOTIFICATION_PATH, label: 'Notification', element: <NotificationPage/>, roles: ['admin'], displayRole: ['admin']},
+    {path: NOTIFICATION_PATH, label: 'Notification', element: <NotificationPage/>, roles: ['admin'], displayRole: ['']},
 
     {path: BOOKING_HISTORY_PATH, label: 'Booking history', element: <BookingHistory/>, roles: ["admin", "agent"], displayRole: ["agent", "admin"]},
-    {path: EDIT_BOOKING_PATH, label: 'Edit booking', element: <BookingForm/>, roles: ["admin", "agent"], displayRole: ["agent", "admin"]},
 
     {path: LOGIN_PATH, label: 'Login', element: <Login/>, roles: ["any"], displayRole: ["any"]},
     {path: LOGOUT_PATH, label: 'Logout', element: <Logout/>, roles: ["user", "admin", "agent"], displayRole: ["user", "admin", "agent"]},

@@ -28,7 +28,9 @@ const TourItems = () => {
   const [language, setLanguage] = useState('')
   const [duration, setDuration] = useState('')
   const [destination, setDestination] = useState('')
-  const [totalCommition, setTotalCommition] = useState('')
+  const [totalToursePrice, setTotalToursPrice] = useState('')
+  const [soldToursPrice, setSoldToursPrice] = useState('')
+
 
   useEffect(() => {
     const curTourItems: TourItemView[] = tours.flatMap((tour) => tour.tourItems.map(tourItem => ({
@@ -47,7 +49,9 @@ const TourItems = () => {
     })));
     setTourItems(curTourItems);
     setInitialTourItems(curTourItems)
-    calculateCommission(curTourItems)
+    //calculateCommission(curTourItems)
+    calculateToursPrice(curTourItems)
+    calculateSoldToursPrice(curTourItems)
 }, []);
 
 const handleFilters = () => {
@@ -65,7 +69,8 @@ const handleFilters = () => {
     curTourItems = curTourItems.filter(e => new Date(e.departureDate) <= new Date(toDate));
   }
   setTourItems([...curTourItems])
-  calculateCommission(curTourItems)
+  calculateToursPrice(curTourItems)
+  calculateSoldToursPrice(curTourItems)
 }
 
 const handleResetFilters = () => {
@@ -78,7 +83,8 @@ const handleResetFilters = () => {
   setDuration('')
   setDestination('')
   setTourItems([...initialTourItems])
-  calculateCommission(initialTourItems)
+  calculateToursPrice(initialTourItems)
+  calculateSoldToursPrice(initialTourItems)
 }
 
 const handleSort = (filter: string, type: string, order: string) => {
@@ -89,10 +95,17 @@ const handleSort = (filter: string, type: string, order: string) => {
   setTourItems(sortedTours)
 }
 
-const calculateCommission = (items: TourItemView[]) => {
-  const result = items.reduce((res, curr) => res += (((curr.totalAvailability - curr.availability) * curr.price) * curr.commission) / 100  , 0)
-  setTotalCommition(result + '')
+const calculateToursPrice = (items: TourItemView[]) => {
+  const result = items.reduce((res, curr) => res += curr.totalAvailability * curr.price , 0)
+  setTotalToursPrice(result + '')
 }
+
+const calculateSoldToursPrice = (items: TourItemView[]) => {
+  const result = items.reduce((res, curr) => res += (curr.totalAvailability - curr.availability) * curr.price , 0)
+  setSoldToursPrice(result + '')
+}
+
+
 
   return (
     <div className="container-fluid">
@@ -181,8 +194,12 @@ const calculateCommission = (items: TourItemView[]) => {
             </div>
           </div>
           <div className="col col-12 pt-4">
-            <p>Total commission: <label className="form-label" style={{ fontWeight: 'bold' }}>
-              {totalCommition} $</label></p>
+            <p>Total tours price: <label className="form-label" style={{ fontWeight: 'bold' }}>
+              {totalToursePrice} $</label></p>
+          </div> 
+          <div className="col col-12 ">
+            <p>Sold tours: <label className="form-label" style={{ fontWeight: 'bold' }}>
+              {soldToursPrice} $</label></p>
           </div> 
         </div>
       </div>

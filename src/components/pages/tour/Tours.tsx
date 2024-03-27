@@ -45,8 +45,6 @@ const Tours = () => {
     setInitialTours(sortedTours)
   }
 
-  console.log(initialTours)
-
   return (
     <div className="container-fluid">
       <div className="container-fluid my-4 py-2" style={{background: 'white', borderRadius: '15px'}}>

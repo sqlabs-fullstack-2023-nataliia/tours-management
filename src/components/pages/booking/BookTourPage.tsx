@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useTourStore } from '../../../store/useTourStore';
 import { tourService } from '../../../config/service-config';
 import { TourModel } from '../../../models/TourModel';
@@ -10,6 +10,7 @@ const BookTourPage = () => {
 
   const { tourId } = useParams();
   const { tourItemId } = useParams();
+  const navigate = useNavigate()
   const setRelevantTour = useTourStore((state) => state.setTour)
   const setRelevantTourItem = useRelevantTourItemsStore((state) => state.setRelevantTourItem)
 
@@ -24,7 +25,7 @@ const BookTourPage = () => {
         const currTourItem = currentTour.tourItems.find((e: any) => e.id == tourItemId)
 
         currTourItem && setRelevantTourItem(currTourItem)
-      }
+      } 
       setIsLoading(false)
     })();
   }, [tourId]);

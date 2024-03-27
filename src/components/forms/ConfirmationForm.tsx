@@ -53,7 +53,6 @@ const ConfirmationForm = ({customers, confirmationFn}: Props) => {
             name: relevantTour?.name,
             destination: relevantTour?.destination,
             duration: relevantTour?.duration,
-            image: relevantTour?.image,
             commission: relevantTour?.commission,
         },
         tourItem: {
@@ -67,7 +66,7 @@ const ConfirmationForm = ({customers, confirmationFn}: Props) => {
             firstName: user?.firstName,
             lastName: user?.lastName,
             role: user?.role,
-            tourAgency: user?.tourAgency
+            tourAgency: user?.role === 'agent' ? user.tourAgency : 'self'
         },
         customers: customers,
         takingDate: new Date().toISOString().split("T")[0],

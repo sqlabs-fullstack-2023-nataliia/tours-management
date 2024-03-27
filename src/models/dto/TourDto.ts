@@ -4,7 +4,6 @@ export interface TourDto {
     name: string,
     destination: string,
     duration: number,
-    image: string,
     commission: number,
     // TODO
     // description: string[]
