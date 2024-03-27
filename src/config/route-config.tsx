@@ -9,12 +9,13 @@ import Tours from "../components/pages/tour/Tours";
 import AddUser from "../components/forms/UserForm";
 import Users from "../components/pages/Users";
 import TourItems from "../components/pages/tour/TourItemsPage";
-import AddTour from "../components/pages/tour/AddTour";
+import UpdateTour from "../components/pages/tour/UpdateTour";
 import Settings from "../components/pages/Settings";
 import TourPage from "../components/pages/booking/TourPage";
 import BookTourPage from "../components/pages/booking/BookTourPage";
 import NotificationPage from "../components/pages/NotificationPage";
 import NotFoundPage from "../components/pages/NotFoundPage";
+import AddTour from "../components/pages/AddTour";
 
 export const NOT_FOUND_PATH = '*'
 export const HOME_PATH = '/';
@@ -26,7 +27,9 @@ export const LOGIN_PATH = '/login';
 export const LOGOUT_PATH = '/logout';
 
 // TODO export const ADD_TOUR_PATH = '/tours/:tourId';
-export const ADD_TOUR_PATH = '/tours/add-update/:tourId';
+export const ADD_TOUR_PATH = '/tours/add';
+export const UPDATE_TOUR_PATH = '/tours/update/:tourId';
+
 export const TOURS_PATH = '/tours';
 export const TOUR_ITEMS_PATH = '/tour-items';
 export const ADD_USER_PATH = '/users/add';
@@ -46,7 +49,10 @@ export const ROUTES: RouteType[] = [
     {path: BOOK_TOUR_PATH, label: 'Book tour', element: <BookTourPage/>, roles: ["user", "admin", "agent"], displayRole: [""]},
     {path: BASKET_PATH, label: 'Basket', element: <Basket/>, roles: [""], displayRole: ["any", "user"]},
 
+    {path: UPDATE_TOUR_PATH, label: 'Update tour', element: <UpdateTour/>, roles: ["admin"], displayRole: [""]},
     {path: ADD_TOUR_PATH, label: 'Add tour', element: <AddTour/>, roles: ["admin"], displayRole: ["admin"]},
+
+
     {path: TOURS_PATH, label: 'Tours', element: <Tours/>, roles: ["admin"], displayRole: ["admin"]},
     {path: TOUR_ITEMS_PATH, label: 'Tour items', element: <TourItems/>, roles: ["admin"], displayRole: ["admin"]},
     {path: ADD_USER_PATH, label: 'Add user', element: <AddUser/>, roles: ["admin"], displayRole: [""]},

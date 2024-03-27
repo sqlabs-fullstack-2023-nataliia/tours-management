@@ -68,7 +68,7 @@ const TourRow = ({tour}: Props) => {
               </button>
             </div>
             <div className="col col-lg-1 ">
-              <Link to={`add-update/${tour.id}`}>
+              <Link to={`update/${tour.id}`}>
                 <button onClick={() => {}} className='btn'> <TbPencil/></button>
               </Link>
             </div>
